@@ -1,5 +1,7 @@
 package ozoriani.empleomadrynbackend.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -23,5 +25,8 @@ public class Usuario {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favoritos> favoritos = new ArrayList<>();
 }
 
