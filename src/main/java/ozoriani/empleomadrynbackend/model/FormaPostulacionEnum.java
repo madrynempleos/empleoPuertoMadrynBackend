@@ -1,6 +1,6 @@
 package ozoriani.empleomadrynbackend.model;
 
-public enum FormaPostulacionEum {
+public enum FormaPostulacionEnum {
     MAIL, LINK
 }
 

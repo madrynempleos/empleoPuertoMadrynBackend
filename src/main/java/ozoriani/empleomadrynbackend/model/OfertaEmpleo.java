@@ -36,7 +36,7 @@ public class OfertaEmpleo {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private FormaPostulacionEum formaPostulacion;
+    private FormaPostulacionEnum formaPostulacion;
 
     private String emailContacto; // Si aplica por email
     private String linkPostulacion; // Si aplica por link externo
