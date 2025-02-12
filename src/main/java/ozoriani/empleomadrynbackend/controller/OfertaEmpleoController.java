@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
 import ozoriani.empleomadrynbackend.service.OfertaEmpleoService;
+import ozoriani.empleomadrynbackend.dto.OfertaEmpleoResponseDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,20 +26,16 @@ public class OfertaEmpleoController {
 
     // Obtener todas las ofertas de empleo
     @GetMapping
-    public ResponseEntity<List<OfertaEmpleo>> getAllOfertas() {
-        List<OfertaEmpleo> ofertas = ofertaEmpleoService.getAllOfertas();
+    public ResponseEntity<List<OfertaEmpleoResponseDTO>> getAllOfertas() {
+        List<OfertaEmpleoResponseDTO> ofertas = ofertaEmpleoService.getAllOfertas();
         return ResponseEntity.ok(ofertas);
     }
 
     // Obtener una oferta de empleo por ID
     @GetMapping("/{id}")
-    public ResponseEntity<OfertaEmpleo> getOfertaById(@PathVariable UUID id) {
-        OfertaEmpleo oferta = ofertaEmpleoService.getOfertaById(id);
-        if (oferta != null) {
-            return ResponseEntity.ok(oferta);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<OfertaEmpleoResponseDTO> getOfertaById(@PathVariable UUID id) {
+        OfertaEmpleoResponseDTO oferta = ofertaEmpleoService.getOfertaById(id);
+        return ResponseEntity.ok(oferta);
     }
 
     // Actualizar una oferta de empleo

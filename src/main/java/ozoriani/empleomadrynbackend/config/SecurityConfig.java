@@ -13,8 +13,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2UserServiceImpl customOAuth2UserService) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF para pruebas
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/api/usuarios/**").permitAll()
+                        //.requestMatchers("/api/ofertas/**").permitAll()   // Temporalmente para pruebas
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
