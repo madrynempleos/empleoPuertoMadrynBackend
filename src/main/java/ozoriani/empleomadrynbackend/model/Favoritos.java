@@ -11,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Favoritos {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -22,5 +23,6 @@ public class Favoritos {
     @ManyToOne
     @JoinColumn(name = "oferta_id", nullable = false)
     private OfertaEmpleo ofertaEmpleo;
+
 }
 
