@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import jakarta.persistence.*;
 import lombok.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "usuario")
@@ -17,12 +18,18 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(nullable = false, length = 100)
+    @NotNull(message = "El nombre es requerido")
+    @Size(max = 15, message = "El nombre no puede tener más de 100 caracteres")
+    @Column(nullable = false, length = 15)
     private String nombre;
 
+    @NotNull(message = "El email es requerido")
+    @Email(message = "El formato del email no es válido")
     @Column(nullable = false, unique = true, length = 150)
     private String email;
 
+    @NotNull(message = "La contraseña es requerida")
+    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres")
     @Column(nullable = false)
     private String password;
 

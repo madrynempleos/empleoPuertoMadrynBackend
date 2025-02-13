@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
 import ozoriani.empleomadrynbackend.service.OfertaEmpleoService;
 import ozoriani.empleomadrynbackend.dto.OfertaEmpleoResponseDTO;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public class OfertaEmpleoController {
 
     // Crear una nueva oferta de empleo
     @PostMapping
-    public ResponseEntity<OfertaEmpleo> createOferta(@RequestBody OfertaEmpleo ofertaEmpleo) {
+    public ResponseEntity<OfertaEmpleo> createOferta(@Valid @RequestBody OfertaEmpleo ofertaEmpleo) {
         OfertaEmpleo nuevaOferta = ofertaEmpleoService.createOferta(ofertaEmpleo);
         return ResponseEntity.ok(nuevaOferta);
     }
@@ -40,7 +41,7 @@ public class OfertaEmpleoController {
 
     // Actualizar una oferta de empleo
     @PutMapping("/{id}")
-    public ResponseEntity<OfertaEmpleo> updateOferta(@PathVariable UUID id, @RequestBody OfertaEmpleo ofertaEmpleo) {
+    public ResponseEntity<OfertaEmpleo> updateOferta(@PathVariable UUID id, @Valid @RequestBody OfertaEmpleo ofertaEmpleo) {
         OfertaEmpleo ofertaActualizada = ofertaEmpleoService.updateOferta(id, ofertaEmpleo);
         if (ofertaActualizada != null) {
             return ResponseEntity.ok(ofertaActualizada);
