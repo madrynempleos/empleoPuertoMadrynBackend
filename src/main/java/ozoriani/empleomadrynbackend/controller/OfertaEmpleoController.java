@@ -6,7 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
 import ozoriani.empleomadrynbackend.service.OfertaEmpleoService;
 import ozoriani.empleomadrynbackend.dto.OfertaEmpleoResponseDTO;
+import ozoriani.empleomadrynbackend.errors.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,18 +40,22 @@ public class OfertaEmpleoController {
     // Obtener una oferta de empleo por ID
     @GetMapping("/{id}")
     public ResponseEntity<OfertaEmpleoResponseDTO> getOfertaById(@PathVariable UUID id) {
-        OfertaEmpleoResponseDTO oferta = ofertaEmpleoService.getOfertaById(id);
-        return ResponseEntity.ok(oferta);
+        try {
+            OfertaEmpleoResponseDTO oferta = ofertaEmpleoService.getOfertaById(id);
+            return ResponseEntity.ok(oferta);
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     // Actualizar una oferta de empleo
     @PutMapping("/{id}")
     public ResponseEntity<OfertaEmpleo> updateOferta(@PathVariable UUID id, @Valid @RequestBody OfertaEmpleo ofertaEmpleo) {
-        OfertaEmpleo ofertaActualizada = ofertaEmpleoService.updateOferta(id, ofertaEmpleo);
-        if (ofertaActualizada != null) {
+        try {
+            OfertaEmpleo ofertaActualizada = ofertaEmpleoService.updateOferta(id, ofertaEmpleo);
             return ResponseEntity.ok(ofertaActualizada);
-        } else {
-            return ResponseEntity.notFound().build();
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -59,5 +68,15 @@ public class OfertaEmpleoController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+}
+
+@RestControllerAdvice
+class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Void> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 }

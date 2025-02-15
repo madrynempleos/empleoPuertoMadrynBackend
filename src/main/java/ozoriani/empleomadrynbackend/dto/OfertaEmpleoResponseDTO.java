@@ -1,10 +1,14 @@
 package ozoriani.empleomadrynbackend.dto;
 
 import java.time.LocalDateTime;
-import lombok.Data;
+import java.util.UUID;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OfertaEmpleoResponseDTO {
+    private UUID id;
     private String titulo;
     private String descripcion;
     

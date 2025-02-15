@@ -157,6 +157,7 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
 
     private OfertaEmpleoResponseDTO convertToDTO(OfertaEmpleo ofertaEmpleo) {
         OfertaEmpleoResponseDTO dto = new OfertaEmpleoResponseDTO();
+        dto.setId(ofertaEmpleo.getId());
         dto.setTitulo(ofertaEmpleo.getTitulo());
         dto.setDescripcion(ofertaEmpleo.getDescripcion());
         
