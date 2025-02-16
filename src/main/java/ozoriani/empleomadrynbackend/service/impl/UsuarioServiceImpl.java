@@ -77,6 +77,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuario.getEmail() != null)
             usuarioToUpdate.setEmail(usuario.getEmail());
         usuarioToUpdate.setFavoritos(usuario.getFavoritos());
+        usuarioToUpdate.setPublicaciones(usuario.getPublicaciones());
     }
 
 }
