@@ -3,6 +3,7 @@ package ozoriani.empleomadrynbackend.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import ozoriani.empleomadrynbackend.service.impl.OAuth2UserServiceImpl;
@@ -13,12 +14,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2UserServiceImpl customOAuth2UserService) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF para pruebas
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/api/public/**").permitAll()
-                        .requestMatchers("/api/usuarios/**").permitAll()
-                        //.requestMatchers("/api/ofertas/**").permitAll()   // Temporalmente para pruebas
+                        .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
