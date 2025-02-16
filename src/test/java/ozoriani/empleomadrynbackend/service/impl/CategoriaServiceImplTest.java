@@ -1,4 +1,4 @@
-package ozoriani.empleomadrynbackend;
+package ozoriani.empleomadrynbackend.service.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,6 @@ import org.mockito.MockitoAnnotations;
 import ozoriani.empleomadrynbackend.errors.exception.ResourceNotFoundException;
 import ozoriani.empleomadrynbackend.model.Categoria;
 import ozoriani.empleomadrynbackend.repository.CategoriaRepository;
-import ozoriani.empleomadrynbackend.service.impl.CategoriaServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class CategoriaServiceTest {
+public class CategoriaServiceImplTest {
 
     @Mock
     private CategoriaRepository categoriaRepository;
