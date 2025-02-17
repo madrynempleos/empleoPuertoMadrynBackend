@@ -28,8 +28,8 @@ public class OfertaEmpleo {
 
     @NotNull(message = "El usuario publicador es requerido")
     @ManyToOne
-    @JoinColumn(name = "usuario_publicador_id", nullable = false)
-    private Usuario usuarioPublicador;
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 
     @NotNull(message = "La empresa consultora es requerida")
     @Size(max = 150, message = "La empresa consultora no puede tener más de 150 caracteres")

@@ -57,7 +57,7 @@ public class OfertaEmpleoServiceImplTest {
         MockitoAnnotations.openMocks(this);
         ofertaEmpleo = new OfertaEmpleo();
         ofertaEmpleo.setId(UUID.randomUUID());
-        ofertaEmpleo.setUsuarioPublicador(usuarioPublicador);
+        ofertaEmpleo.setUsuario(usuarioPublicador);
         ofertaEmpleo.setCategoria(categoria);
         ofertaEmpleo.setTitulo("Desarrollador Java");
         ofertaEmpleo.setDescripcion("Se busca desarrollador Java con experiencia.");
@@ -162,8 +162,8 @@ public class OfertaEmpleoServiceImplTest {
     }
 
     @Test
-    public void testValidateOfertaEmpleoWithMissingUsuarioPublicador() {
-        ofertaEmpleo.setUsuarioPublicador(null);
+    public void testValidateOfertaEmpleoWithMissingUsuario() {
+        ofertaEmpleo.setUsuario(null);
         assertThrows(ValidationException.class, () -> {
             ofertaEmpleoService.createOferta(ofertaEmpleo);
         });

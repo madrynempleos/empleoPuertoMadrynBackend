@@ -86,10 +86,10 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
         }
 
         // Validación de Usuario Publicador
-        if (ofertaEmpleo.getUsuarioPublicador() == null || ofertaEmpleo.getUsuarioPublicador().getId() == null) {
+        if (ofertaEmpleo.getUsuario() == null || ofertaEmpleo.getUsuario().getId() == null) {
             errors.add("El usuario publicador es requerido");
         } else {
-            if (!usuarioRepository.existsById(ofertaEmpleo.getUsuarioPublicador().getId())) {
+            if (!usuarioRepository.existsById(ofertaEmpleo.getUsuario().getId())) {
                 errors.add("El usuario publicador especificado no existe");
             }
         }
@@ -163,8 +163,8 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
         
         // Usuario publicador
         OfertaEmpleoResponseDTO.UsuarioPublicadorDTO usuarioDTO = new OfertaEmpleoResponseDTO.UsuarioPublicadorDTO();
-        usuarioDTO.setNombre(ofertaEmpleo.getUsuarioPublicador().getNombre());
-        usuarioDTO.setEmail(ofertaEmpleo.getUsuarioPublicador().getEmail());
+        usuarioDTO.setNombre(ofertaEmpleo.getUsuario().getNombre());
+        usuarioDTO.setEmail(ofertaEmpleo.getUsuario().getEmail());
         dto.setUsuarioPublicador(usuarioDTO);
         
         dto.setEmpresaConsultora(ofertaEmpleo.getEmpresaConsultora());
