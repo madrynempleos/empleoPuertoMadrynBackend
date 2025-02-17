@@ -48,7 +48,7 @@ public class OfertaEmpleoControllerTest {
         MockitoAnnotations.openMocks(this);
         ofertaEmpleo = new OfertaEmpleo();
         ofertaEmpleo.setId(UUID.randomUUID());
-        ofertaEmpleo.setUsuarioPublicador(usuarioPublicador);
+        ofertaEmpleo.setUsuario(usuarioPublicador);
         ofertaEmpleo.setCategoria(categoria);
         ofertaEmpleo.setTitulo("Desarrollador Java");
         ofertaEmpleo.setDescripcion("Se busca desarrollador Java con experiencia.");
