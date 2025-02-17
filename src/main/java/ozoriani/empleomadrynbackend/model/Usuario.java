@@ -20,7 +20,7 @@ public class Usuario {
     private UUID id;
 
     @NotNull(message = "El nombre es requerido")
-    @Size(max = 15, message = "El nombre no puede tener más de 100 caracteres")
+    @Size(max = 100, message = "El nombre no puede tener más de 100 caracteres")
     @Column(nullable = false, length = 15)
     private String nombre;
 
