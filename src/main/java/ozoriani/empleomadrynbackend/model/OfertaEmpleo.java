@@ -3,6 +3,7 @@ package ozoriani.empleomadrynbackend.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.validation.constraints.*;
@@ -29,6 +30,7 @@ public class OfertaEmpleo {
     @NotNull(message = "El usuario publicador es requerido")
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
+    @JsonBackReference
     private Usuario usuario;
 
     @NotNull(message = "La empresa consultora es requerida")
