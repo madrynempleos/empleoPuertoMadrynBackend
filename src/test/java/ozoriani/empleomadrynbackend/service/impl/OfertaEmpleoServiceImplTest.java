@@ -162,7 +162,7 @@ public class OfertaEmpleoServiceImplTest {
     }
 
     @Test
-    public void testValidateOfertaEmpleoWithMissingUsuarioPublicador() {
+    public void testValidateOfertaEmpleoWithMissingUsuario() {
         ofertaEmpleo.setUsuario(null);
         assertThrows(ValidationException.class, () -> {
             ofertaEmpleoService.createOferta(ofertaEmpleo);
@@ -203,4 +203,6 @@ public class OfertaEmpleoServiceImplTest {
             ofertaEmpleoService.createOferta(ofertaEmpleo);
         });
     }
+
+    // Agrega más pruebas según sea necesario para cubrir otros casos
 } 
