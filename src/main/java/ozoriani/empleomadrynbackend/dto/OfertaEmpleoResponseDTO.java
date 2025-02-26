@@ -24,7 +24,6 @@ public class OfertaEmpleoResponseDTO {
     
     @Data
     public static class UsuarioPublicadorDTO {
-        private String nombre;
         private String email;
     }
     

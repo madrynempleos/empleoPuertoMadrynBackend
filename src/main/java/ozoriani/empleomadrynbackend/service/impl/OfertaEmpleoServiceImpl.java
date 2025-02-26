@@ -162,8 +162,7 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
         dto.setDescripcion(ofertaEmpleo.getDescripcion());
         
         // Usuario publicador
-        OfertaEmpleoResponseDTO.UsuarioPublicadorDTO usuarioDTO = new OfertaEmpleoResponseDTO.UsuarioPublicadorDTO();
-        usuarioDTO.setNombre(ofertaEmpleo.getUsuario().getNombre());
+        OfertaEmpleoResponseDTO.UsuarioPublicadorDTO usuarioDTO = new OfertaEmpleoResponseDTO.UsuarioPublicadorDTO();;
         usuarioDTO.setEmail(ofertaEmpleo.getUsuario().getEmail());
         dto.setUsuarioPublicador(usuarioDTO);
         

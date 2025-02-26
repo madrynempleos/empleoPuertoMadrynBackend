@@ -43,6 +43,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SecurityException.class)
+    public ResponseEntity<ApiError> handleSecurityException(
+            SecurityException ex, WebRequest request) {
+        ApiError apiError = new ApiError(
+            HttpStatus.UNAUTHORIZED.value(),
+            "Error de seguridad",
+            ex.getMessage(),
+            request.getDescription(false)
+        );
+        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(InvalidOperationException.class)
     public ResponseEntity<ApiError> handleInvalidOperationException(
             InvalidOperationException ex, WebRequest request) {
