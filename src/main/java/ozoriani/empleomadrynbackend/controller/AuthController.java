@@ -3,7 +3,6 @@ package ozoriani.empleomadrynbackend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import jakarta.validation.Valid;
 import ozoriani.empleomadrynbackend.dto.AuthResponse;
 import ozoriani.empleomadrynbackend.dto.GoogleLoginRequest;
@@ -27,9 +26,9 @@ public class AuthController {
                     request.getName()
             );
             String token = authService.generateJwtToken(usuario.getEmail());
-            return ResponseEntity.ok(new AuthResponse(token));
+            return ResponseEntity.ok(new AuthResponse(usuario.getId().toString(), token));
         } catch (Exception e) {
-            AuthResponse errorResponse = new AuthResponse("Error en autenticación: " + e.getMessage());
+            AuthResponse errorResponse = new AuthResponse(null, "Error en autenticación: " + e.getMessage());
             return ResponseEntity.badRequest().body(errorResponse);
         }
     }
