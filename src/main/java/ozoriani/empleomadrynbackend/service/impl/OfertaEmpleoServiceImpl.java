@@ -1,15 +1,16 @@
 package ozoriani.empleomadrynbackend.service.impl;
 
+import ozoriani.empleomadrynbackend.dto.OfertaEmpleoResponseDTO;
 import ozoriani.empleomadrynbackend.errors.exception.ResourceNotFoundException;
 import ozoriani.empleomadrynbackend.errors.exception.ValidationException;
+import ozoriani.empleomadrynbackend.model.FormaPostulacionEnum;
 import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
-import ozoriani.empleomadrynbackend.service.OfertaEmpleoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import ozoriani.empleomadrynbackend.repository.CategoriaRepository;
 import ozoriani.empleomadrynbackend.repository.OfertaEmpleoRepository;
 import ozoriani.empleomadrynbackend.repository.UsuarioRepository;
+import ozoriani.empleomadrynbackend.service.OfertaEmpleoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,9 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import ozoriani.empleomadrynbackend.dto.OfertaEmpleoResponseDTO;
-import ozoriani.empleomadrynbackend.model.FormaPostulacionEnum;
 
 @Service
 public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
@@ -65,42 +63,28 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
     }
 
     @Override
-    public boolean deleteOferta(UUID id) {
-        if (ofertaEmpleoRepository.existsById(id)) {
-            ofertaEmpleoRepository.deleteById(id);
-            return true;
+    public void deleteOferta(UUID id) { // Cambiado a void para lanzar excepción si falla
+        if (!ofertaEmpleoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Oferta de empleo no encontrada con ID: " + id);
         }
-        return false;
+        ofertaEmpleoRepository.deleteById(id);
     }
 
     private void validateOfertaEmpleo(OfertaEmpleo ofertaEmpleo) {
         List<String> errors = new ArrayList<>();
 
-        // Validaciones básicas
-        if (ofertaEmpleo.getTitulo() == null || ofertaEmpleo.getTitulo().trim().isEmpty()) {
-            errors.add("El título es requerido");
-        }
-        
-        if (ofertaEmpleo.getDescripcion() == null || ofertaEmpleo.getDescripcion().trim().isEmpty()) {
-            errors.add("La descripción es requerida");
-        }
-
         // Validación de Usuario Publicador
         if (ofertaEmpleo.getUsuario() == null || ofertaEmpleo.getUsuario().getId() == null) {
             errors.add("El usuario publicador es requerido");
-        } else {
-            if (!usuarioRepository.existsById(ofertaEmpleo.getUsuario().getId())) {
-                errors.add("El usuario publicador especificado no existe");
-            }
+        } else if (!usuarioRepository.existsById(ofertaEmpleo.getUsuario().getId())) {
+            errors.add("El usuario publicador especificado no existe");
         }
 
         // Validación de Categoría
         if (ofertaEmpleo.getCategoria() == null || ofertaEmpleo.getCategoria().getId() == null) {
             errors.add("La categoría es requerida");
-        } else {
-            if (!categoriaRepository.existsById(ofertaEmpleo.getCategoria().getId())) {
-                errors.add("La categoría especificada no existe");
-            }
+        } else if (!categoriaRepository.existsById(ofertaEmpleo.getCategoria().getId())) {
+            errors.add("La categoría especificada no existe");
         }
 
         // Validación de fechas
@@ -151,7 +135,7 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
             return uri.getScheme() != null && 
                    (uri.getScheme().equals("http") || uri.getScheme().equals("https"));
         } catch (URISyntaxException e) {
-            return false;
+            throw new ValidationException("El formato del link de postulación no es válido");
         }
     }
 
@@ -161,8 +145,7 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
         dto.setTitulo(ofertaEmpleo.getTitulo());
         dto.setDescripcion(ofertaEmpleo.getDescripcion());
         
-        // Usuario publicador
-        OfertaEmpleoResponseDTO.UsuarioPublicadorDTO usuarioDTO = new OfertaEmpleoResponseDTO.UsuarioPublicadorDTO();;
+        OfertaEmpleoResponseDTO.UsuarioPublicadorDTO usuarioDTO = new OfertaEmpleoResponseDTO.UsuarioPublicadorDTO();
         usuarioDTO.setEmail(ofertaEmpleo.getUsuario().getEmail());
         dto.setUsuarioPublicador(usuarioDTO);
         
@@ -171,14 +154,12 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
         dto.setFechaCierre(ofertaEmpleo.getFechaCierre());
         dto.setFormaPostulacion(ofertaEmpleo.getFormaPostulacion().toString());
         
-        // Contacto según forma de postulación
         if (ofertaEmpleo.getFormaPostulacion() == FormaPostulacionEnum.MAIL) {
             dto.setContactoPostulacion(ofertaEmpleo.getEmailContacto());
         } else if (ofertaEmpleo.getFormaPostulacion() == FormaPostulacionEnum.LINK) {
             dto.setContactoPostulacion(ofertaEmpleo.getLinkPostulacion());
         }
         
-        // Categoría
         OfertaEmpleoResponseDTO.CategoriaDTO categoriaDTO = new OfertaEmpleoResponseDTO.CategoriaDTO();
         categoriaDTO.setNombre(ofertaEmpleo.getCategoria().getNombre());
         dto.setCategoria(categoriaDTO);

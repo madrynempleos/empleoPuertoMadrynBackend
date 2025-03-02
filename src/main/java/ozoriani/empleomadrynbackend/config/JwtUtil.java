@@ -55,8 +55,10 @@ public class JwtUtil {
             throw new SecurityException("Token JWT expirado");
         } catch (MalformedJwtException e) {
             throw new SecurityException("Token JWT inválido");
+        } catch (SignatureException e) {
+            throw new SecurityException("Error al validar la firma del token JWT");
         } catch (Exception e) {
-            throw new SecurityException("Error al validar el token JWT: " + e.getMessage());
+            throw new SecurityException("Error inesperado al validar el token JWT");
         }
     }
 }

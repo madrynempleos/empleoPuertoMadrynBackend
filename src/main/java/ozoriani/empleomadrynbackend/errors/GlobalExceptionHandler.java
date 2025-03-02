@@ -102,9 +102,8 @@ public class GlobalExceptionHandler {
             MethodArgumentTypeMismatchException ex, WebRequest request) {
         Class<?> requiredType = ex.getRequiredType();
         String typeName = requiredType != null ? requiredType.getName() : "desconocido";
-        
         String error = ex.getName() + " debería ser de tipo " + typeName;
-        
+
         ApiError apiError = new ApiError(
             HttpStatus.BAD_REQUEST.value(),
             "Error de tipo de parámetro",
@@ -126,13 +125,25 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiError> handleIllegalArgumentException(
+            IllegalArgumentException ex, WebRequest request) {
+        ApiError apiError = new ApiError(
+            HttpStatus.BAD_REQUEST.value(),
+            "Argumento inválido",
+            ex.getMessage(),
+            request.getDescription(false)
+        );
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGlobalException(
             Exception ex, WebRequest request) {
         ApiError apiError = new ApiError(
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             "Error interno del servidor",
-            ex.getMessage(),
+            "Ocurrió un error inesperado",
             request.getDescription(false)
         );
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);

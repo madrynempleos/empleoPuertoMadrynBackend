@@ -10,5 +10,5 @@ public interface OfertaEmpleoService {
     List<OfertaEmpleoResponseDTO> getAllOfertas();
     OfertaEmpleoResponseDTO getOfertaById(UUID id);
     OfertaEmpleo updateOferta(UUID id, OfertaEmpleo ofertaEmpleo);
-    boolean deleteOferta(UUID id);
+    void deleteOferta(UUID id);
 }

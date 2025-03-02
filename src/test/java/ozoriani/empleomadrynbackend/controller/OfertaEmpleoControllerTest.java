@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
@@ -34,18 +35,18 @@ public class OfertaEmpleoControllerTest {
 
     @BeforeEach
     public void setUp() {
+        MockitoAnnotations.openMocks(this);
 
         Usuario usuarioPublicador = new Usuario();
         usuarioPublicador.setId(UUID.randomUUID());
-        usuarioPublicador.setNombre("Maximo Ozonas");
+        usuarioPublicador.setName("Maximo Ozonas"); // Cambié "Nombre" a "Name" para coincidir con tu modelo
         usuarioPublicador.setEmail("maxiozonas@gmail.com");
-        usuarioPublicador.setPassword("12345678");
+        // "Password" no está en tu modelo actual, así que lo eliminé
 
         Categoria categoria = new Categoria();
         categoria.setId(UUID.randomUUID());
         categoria.setNombre("Tecnología");
 
-        MockitoAnnotations.openMocks(this);
         ofertaEmpleo = new OfertaEmpleo();
         ofertaEmpleo.setId(UUID.randomUUID());
         ofertaEmpleo.setUsuario(usuarioPublicador);
@@ -61,69 +62,71 @@ public class OfertaEmpleoControllerTest {
     }
 
     @Test
-    public void testCreateOferta() {
+    public void testCreateOferta_Success() {
         when(ofertaEmpleoService.createOferta(any(OfertaEmpleo.class))).thenReturn(ofertaEmpleo);
         ResponseEntity<OfertaEmpleo> response = ofertaEmpleoController.createOferta(ofertaEmpleo);
-        assertEquals(200, response.getStatusCode().value());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(ofertaEmpleo, response.getBody());
         verify(ofertaEmpleoService, times(1)).createOferta(ofertaEmpleo);
     }
 
     @Test
-    public void testGetAllOfertas() {
+    public void testGetAllOfertas_Success() {
         List<OfertaEmpleoResponseDTO> ofertas = Collections.singletonList(new OfertaEmpleoResponseDTO());
         when(ofertaEmpleoService.getAllOfertas()).thenReturn(ofertas);
         ResponseEntity<List<OfertaEmpleoResponseDTO>> response = ofertaEmpleoController.getAllOfertas();
-        
-        assertEquals(200, response.getStatusCode().value());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(1, response.getBody().size());
         verify(ofertaEmpleoService, times(1)).getAllOfertas();
     }
 
     @Test
-    public void testGetOfertaById() {
-        when(ofertaEmpleoService.getOfertaById(any(UUID.class))).thenReturn(new OfertaEmpleoResponseDTO());
+    public void testGetOfertaById_Success() {
+        OfertaEmpleoResponseDTO dto = new OfertaEmpleoResponseDTO();
+        when(ofertaEmpleoService.getOfertaById(ofertaEmpleo.getId())).thenReturn(dto);
         ResponseEntity<OfertaEmpleoResponseDTO> response = ofertaEmpleoController.getOfertaById(ofertaEmpleo.getId());
-        assertEquals(200, response.getStatusCode().value());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(dto, response.getBody());
         verify(ofertaEmpleoService, times(1)).getOfertaById(ofertaEmpleo.getId());
     }
 
     @Test
-    public void testGetOfertaByIdNotFound() {
+    public void testGetOfertaById_NotFound() {
         when(ofertaEmpleoService.getOfertaById(any(UUID.class))).thenThrow(new ResourceNotFoundException("Oferta no encontrada"));
-        ResponseEntity<OfertaEmpleoResponseDTO> response = ofertaEmpleoController.getOfertaById(UUID.randomUUID());
-        assertEquals(404, response.getStatusCode().value());
+        assertThrows(ResourceNotFoundException.class, () -> ofertaEmpleoController.getOfertaById(UUID.randomUUID()));
+        verify(ofertaEmpleoService, times(1)).getOfertaById(any(UUID.class));
     }
 
     @Test
-    public void testUpdateOferta() {
+    public void testUpdateOferta_Success() {
         when(ofertaEmpleoService.updateOferta(any(UUID.class), any(OfertaEmpleo.class))).thenReturn(ofertaEmpleo);
         ResponseEntity<OfertaEmpleo> response = ofertaEmpleoController.updateOferta(ofertaEmpleo.getId(), ofertaEmpleo);
-        assertEquals(200, response.getStatusCode().value());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(ofertaEmpleo, response.getBody());
         verify(ofertaEmpleoService, times(1)).updateOferta(ofertaEmpleo.getId(), ofertaEmpleo);
     }
 
     @Test
-    public void testUpdateOfertaNotFound() {
-        when(ofertaEmpleoService.updateOferta(any(UUID.class), any(OfertaEmpleo.class))).thenThrow(new ResourceNotFoundException("Oferta no encontrada"));
-        ResponseEntity<OfertaEmpleo> response = ofertaEmpleoController.updateOferta(UUID.randomUUID(), ofertaEmpleo);
-        assertEquals(404, response.getStatusCode().value());
+    public void testUpdateOferta_NotFound() {
+        when(ofertaEmpleoService.updateOferta(any(UUID.class), any(OfertaEmpleo.class)))
+                .thenThrow(new ResourceNotFoundException("Oferta no encontrada"));
+        assertThrows(ResourceNotFoundException.class, () -> ofertaEmpleoController.updateOferta(UUID.randomUUID(), ofertaEmpleo));
+        verify(ofertaEmpleoService, times(1)).updateOferta(any(UUID.class), eq(ofertaEmpleo));
     }
 
     @Test
-    public void testDeleteOferta() {
-        when(ofertaEmpleoService.deleteOferta(any(UUID.class))).thenReturn(true);
+    public void testDeleteOferta_Success() {
+        doNothing().when(ofertaEmpleoService).deleteOferta(ofertaEmpleo.getId());
         ResponseEntity<Void> response = ofertaEmpleoController.deleteOferta(ofertaEmpleo.getId());
-        assertEquals(204, response.getStatusCode().value());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         verify(ofertaEmpleoService, times(1)).deleteOferta(ofertaEmpleo.getId());
     }
 
     @Test
-    public void testDeleteOfertaNotFound() {
-        when(ofertaEmpleoService.deleteOferta(any(UUID.class))).thenReturn(false);
-        ResponseEntity<Void> response = ofertaEmpleoController.deleteOferta(UUID.randomUUID());
-        assertEquals(404, response.getStatusCode().value());
+    public void testDeleteOferta_NotFound() {
+        doThrow(new ResourceNotFoundException("Oferta no encontrada")).when(ofertaEmpleoService).deleteOferta(any(UUID.class));
+        assertThrows(ResourceNotFoundException.class, () -> ofertaEmpleoController.deleteOferta(UUID.randomUUID()));
+        verify(ofertaEmpleoService, times(1)).deleteOferta(any(UUID.class));
     }
-} 
+}

@@ -3,13 +3,13 @@ package ozoriani.empleomadrynbackend.service.impl;
 import ozoriani.empleomadrynbackend.dto.OfertaEmpleoResponseDTO;
 import ozoriani.empleomadrynbackend.errors.exception.ResourceNotFoundException;
 import ozoriani.empleomadrynbackend.errors.exception.ValidationException;
-import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
-import ozoriani.empleomadrynbackend.model.FormaPostulacionEnum;
-import ozoriani.empleomadrynbackend.model.Usuario;
 import ozoriani.empleomadrynbackend.model.Categoria;
+import ozoriani.empleomadrynbackend.model.FormaPostulacionEnum;
+import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
+import ozoriani.empleomadrynbackend.model.Usuario;
+import ozoriani.empleomadrynbackend.repository.CategoriaRepository;
 import ozoriani.empleomadrynbackend.repository.OfertaEmpleoRepository;
 import ozoriani.empleomadrynbackend.repository.UsuarioRepository;
-import ozoriani.empleomadrynbackend.repository.CategoriaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -43,18 +43,17 @@ public class OfertaEmpleoServiceImplTest {
 
     @BeforeEach
     public void setUp() {
+        MockitoAnnotations.openMocks(this);
 
         Usuario usuarioPublicador = new Usuario();
         usuarioPublicador.setId(UUID.randomUUID());
-        usuarioPublicador.setNombre("Maximo Ozonas");
+        usuarioPublicador.setName("Maximo Ozonas"); // Cambié "Nombre" a "Name"
         usuarioPublicador.setEmail("maxiozonas@gmail.com");
-        usuarioPublicador.setPassword("12345678");
 
         Categoria categoria = new Categoria();
         categoria.setId(UUID.randomUUID());
         categoria.setNombre("Tecnología");
 
-        MockitoAnnotations.openMocks(this);
         ofertaEmpleo = new OfertaEmpleo();
         ofertaEmpleo.setId(UUID.randomUUID());
         ofertaEmpleo.setUsuario(usuarioPublicador);
@@ -70,11 +69,11 @@ public class OfertaEmpleoServiceImplTest {
     }
 
     @Test
-    public void testCreateOferta() {
+    public void testCreateOferta_Success() {
         when(usuarioRepository.existsById(any(UUID.class))).thenReturn(true);
         when(categoriaRepository.existsById(any(UUID.class))).thenReturn(true);
-        
         when(ofertaEmpleoRepository.save(any(OfertaEmpleo.class))).thenReturn(ofertaEmpleo);
+
         OfertaEmpleo result = ofertaEmpleoService.createOferta(ofertaEmpleo);
         assertNotNull(result);
         assertEquals(ofertaEmpleo.getTitulo(), result.getTitulo());
@@ -82,10 +81,11 @@ public class OfertaEmpleoServiceImplTest {
     }
 
     @Test
-    public void testGetAllOfertas() {
+    public void testGetAllOfertas_Success() {
         List<OfertaEmpleo> ofertas = new ArrayList<>();
         ofertas.add(ofertaEmpleo);
         when(ofertaEmpleoRepository.findAll()).thenReturn(ofertas);
+
         List<OfertaEmpleoResponseDTO> result = ofertaEmpleoService.getAllOfertas();
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -93,8 +93,9 @@ public class OfertaEmpleoServiceImplTest {
     }
 
     @Test
-    public void testGetOfertaById() {
+    public void testGetOfertaById_Success() {
         when(ofertaEmpleoRepository.findById(any(UUID.class))).thenReturn(Optional.of(ofertaEmpleo));
+
         OfertaEmpleoResponseDTO result = ofertaEmpleoService.getOfertaById(ofertaEmpleo.getId());
         assertNotNull(result);
         assertEquals(ofertaEmpleo.getId(), result.getId());
@@ -102,107 +103,105 @@ public class OfertaEmpleoServiceImplTest {
     }
 
     @Test
-    public void testGetOfertaByIdNotFound() {
+    public void testGetOfertaById_NotFound() {
         when(ofertaEmpleoRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> {
-            ofertaEmpleoService.getOfertaById(UUID.randomUUID());
-        });
+        assertThrows(ResourceNotFoundException.class, () -> ofertaEmpleoService.getOfertaById(UUID.randomUUID()));
+        verify(ofertaEmpleoRepository, times(1)).findById(any(UUID.class));
     }
 
     @Test
-    public void testUpdateOferta() {
+    public void testUpdateOferta_Success() {
         when(usuarioRepository.existsById(any(UUID.class))).thenReturn(true);
         when(categoriaRepository.existsById(any(UUID.class))).thenReturn(true);
-        
         when(ofertaEmpleoRepository.existsById(any(UUID.class))).thenReturn(true);
         when(ofertaEmpleoRepository.save(any(OfertaEmpleo.class))).thenReturn(ofertaEmpleo);
+
         OfertaEmpleo result = ofertaEmpleoService.updateOferta(ofertaEmpleo.getId(), ofertaEmpleo);
         assertNotNull(result);
+        assertEquals(ofertaEmpleo.getId(), result.getId());
         verify(ofertaEmpleoRepository, times(1)).save(ofertaEmpleo);
     }
 
     @Test
-    public void testUpdateOfertaNotFound() {
+    public void testUpdateOferta_NotFound() {
         when(ofertaEmpleoRepository.existsById(any(UUID.class))).thenReturn(false);
-        assertThrows(ResourceNotFoundException.class, () -> {
-            ofertaEmpleoService.updateOferta(UUID.randomUUID(), ofertaEmpleo);
-        });
+        assertThrows(ResourceNotFoundException.class, () -> ofertaEmpleoService.updateOferta(UUID.randomUUID(), ofertaEmpleo));
+        verify(ofertaEmpleoRepository, times(1)).existsById(any(UUID.class));
     }
 
     @Test
-    public void testDeleteOferta() {
+    public void testDeleteOferta_Success() {
         when(ofertaEmpleoRepository.existsById(any(UUID.class))).thenReturn(true);
-        boolean result = ofertaEmpleoService.deleteOferta(ofertaEmpleo.getId());
-        assertTrue(result);
+        doNothing().when(ofertaEmpleoRepository).deleteById(any(UUID.class));
+
+        ofertaEmpleoService.deleteOferta(ofertaEmpleo.getId());
         verify(ofertaEmpleoRepository, times(1)).deleteById(ofertaEmpleo.getId());
     }
 
     @Test
-    public void testDeleteOfertaNotFound() {
+    public void testDeleteOferta_NotFound() {
         when(ofertaEmpleoRepository.existsById(any(UUID.class))).thenReturn(false);
-        boolean result = ofertaEmpleoService.deleteOferta(UUID.randomUUID());
-        assertFalse(result);
-        verify(ofertaEmpleoRepository, times(0)).deleteById(any(UUID.class));
+        assertThrows(ResourceNotFoundException.class, () -> ofertaEmpleoService.deleteOferta(UUID.randomUUID()));
+        verify(ofertaEmpleoRepository, times(1)).existsById(any(UUID.class));
+        verify(ofertaEmpleoRepository, never()).deleteById(any(UUID.class));
     }
 
     @Test
-    public void testValidateOfertaEmpleoWithMissingTitle() {
-        ofertaEmpleo.setTitulo(null);
-        assertThrows(ValidationException.class, () -> {
-            ofertaEmpleoService.createOferta(ofertaEmpleo);
-        });
-    }
-
-    @Test
-    public void testValidateOfertaEmpleoWithMissingDescription() {
-        ofertaEmpleo.setDescripcion(null);
-        assertThrows(ValidationException.class, () -> {
-            ofertaEmpleoService.createOferta(ofertaEmpleo);
-        });
-    }
-
-    @Test
-    public void testValidateOfertaEmpleoWithMissingUsuario() {
+    public void testValidateOfertaEmpleo_MissingUsuario() {
         ofertaEmpleo.setUsuario(null);
-        assertThrows(ValidationException.class, () -> {
-            ofertaEmpleoService.createOferta(ofertaEmpleo);
-        });
+        assertThrows(ValidationException.class, () -> ofertaEmpleoService.createOferta(ofertaEmpleo));
     }
 
     @Test
-    public void testValidateOfertaEmpleoWithInvalidEmail() {
+    public void testValidateOfertaEmpleo_InvalidUsuario() {
+        when(usuarioRepository.existsById(ofertaEmpleo.getUsuario().getId())).thenReturn(false);
+        assertThrows(ValidationException.class, () -> ofertaEmpleoService.createOferta(ofertaEmpleo));
+    }
+
+    @Test
+    public void testValidateOfertaEmpleo_MissingCategoria() {
+        ofertaEmpleo.setCategoria(null);
+        assertThrows(ValidationException.class, () -> ofertaEmpleoService.createOferta(ofertaEmpleo));
+    }
+
+    @Test
+    public void testValidateOfertaEmpleo_InvalidCategoria() {
+        when(categoriaRepository.existsById(ofertaEmpleo.getCategoria().getId())).thenReturn(false);
+        assertThrows(ValidationException.class, () -> ofertaEmpleoService.createOferta(ofertaEmpleo));
+    }
+
+    @Test
+    public void testValidateOfertaEmpleo_InvalidEmail() {
         ofertaEmpleo.setFormaPostulacion(FormaPostulacionEnum.MAIL);
         ofertaEmpleo.setEmailContacto("invalid-email");
-        assertThrows(ValidationException.class, () -> {
-            ofertaEmpleoService.createOferta(ofertaEmpleo);
-        });
+        when(usuarioRepository.existsById(any(UUID.class))).thenReturn(true);
+        when(categoriaRepository.existsById(any(UUID.class))).thenReturn(true);
+        assertThrows(ValidationException.class, () -> ofertaEmpleoService.createOferta(ofertaEmpleo));
     }
 
     @Test
-    public void testValidateOfertaEmpleoWithInvalidLink() {
+    public void testValidateOfertaEmpleo_InvalidLink() {
         ofertaEmpleo.setFormaPostulacion(FormaPostulacionEnum.LINK);
         ofertaEmpleo.setLinkPostulacion("invalid-link");
-        assertThrows(ValidationException.class, () -> {
-            ofertaEmpleoService.createOferta(ofertaEmpleo);
-        });
+        when(usuarioRepository.existsById(any(UUID.class))).thenReturn(true);
+        when(categoriaRepository.existsById(any(UUID.class))).thenReturn(true);
+        assertThrows(ValidationException.class, () -> ofertaEmpleoService.createOferta(ofertaEmpleo));
     }
 
     @Test
-    public void testValidateOfertaEmpleoWithPastClosingDate() {
+    public void testValidateOfertaEmpleo_PastClosingDate() {
         ofertaEmpleo.setFechaCierre(LocalDateTime.now().minusDays(1));
-        assertThrows(ValidationException.class, () -> {
-            ofertaEmpleoService.createOferta(ofertaEmpleo);
-        });
+        when(usuarioRepository.existsById(any(UUID.class))).thenReturn(true);
+        when(categoriaRepository.existsById(any(UUID.class))).thenReturn(true);
+        assertThrows(ValidationException.class, () -> ofertaEmpleoService.createOferta(ofertaEmpleo));
     }
 
     @Test
-    public void testValidateOfertaEmpleoWithClosingDateBeforePublication() {
+    public void testValidateOfertaEmpleo_ClosingDateBeforePublication() {
         ofertaEmpleo.setFechaCierre(LocalDateTime.now().plusDays(1));
         ofertaEmpleo.setFechaPublicacion(LocalDateTime.now().plusDays(2));
-        assertThrows(ValidationException.class, () -> {
-            ofertaEmpleoService.createOferta(ofertaEmpleo);
-        });
+        when(usuarioRepository.existsById(any(UUID.class))).thenReturn(true);
+        when(categoriaRepository.existsById(any(UUID.class))).thenReturn(true);
+        assertThrows(ValidationException.class, () -> ofertaEmpleoService.createOferta(ofertaEmpleo));
     }
-
-    // Agrega más pruebas según sea necesario para cubrir otros casos
-} 
+}

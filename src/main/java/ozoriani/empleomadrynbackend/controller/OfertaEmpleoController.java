@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
 import ozoriani.empleomadrynbackend.service.OfertaEmpleoService;
 import ozoriani.empleomadrynbackend.dto.OfertaEmpleoResponseDTO;
-import ozoriani.empleomadrynbackend.errors.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,51 +18,33 @@ public class OfertaEmpleoController {
     @Autowired
     private OfertaEmpleoService ofertaEmpleoService;
 
-    // Crear una nueva oferta de empleo
     @PostMapping
     public ResponseEntity<OfertaEmpleo> createOferta(@Valid @RequestBody OfertaEmpleo ofertaEmpleo) {
         OfertaEmpleo nuevaOferta = ofertaEmpleoService.createOferta(ofertaEmpleo);
         return ResponseEntity.ok(nuevaOferta);
     }
 
-    // Obtener todas las ofertas de empleo
     @GetMapping
     public ResponseEntity<List<OfertaEmpleoResponseDTO>> getAllOfertas() {
         List<OfertaEmpleoResponseDTO> ofertas = ofertaEmpleoService.getAllOfertas();
         return ResponseEntity.ok(ofertas);
     }
 
-    // Obtener una oferta de empleo por ID
     @GetMapping("/{id}")
     public ResponseEntity<OfertaEmpleoResponseDTO> getOfertaById(@PathVariable UUID id) {
-        try {
-            OfertaEmpleoResponseDTO oferta = ofertaEmpleoService.getOfertaById(id);
-            return ResponseEntity.ok(oferta);
-        } catch (ResourceNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        OfertaEmpleoResponseDTO oferta = ofertaEmpleoService.getOfertaById(id);
+        return ResponseEntity.ok(oferta);
     }
 
-    // Actualizar una oferta de empleo
     @PutMapping("/{id}")
     public ResponseEntity<OfertaEmpleo> updateOferta(@PathVariable UUID id, @Valid @RequestBody OfertaEmpleo ofertaEmpleo) {
-        try {
-            OfertaEmpleo ofertaActualizada = ofertaEmpleoService.updateOferta(id, ofertaEmpleo);
-            return ResponseEntity.ok(ofertaActualizada);
-        } catch (ResourceNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        OfertaEmpleo ofertaActualizada = ofertaEmpleoService.updateOferta(id, ofertaEmpleo);
+        return ResponseEntity.ok(ofertaActualizada);
     }
 
-    // Eliminar una oferta de empleo
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOferta(@PathVariable UUID id) {
-        boolean eliminado = ofertaEmpleoService.deleteOferta(id);
-        if (eliminado) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        ofertaEmpleoService.deleteOferta(id); // Esto lanzará ResourceNotFoundException si no existe
+        return ResponseEntity.noContent().build();
     }
 }
-
