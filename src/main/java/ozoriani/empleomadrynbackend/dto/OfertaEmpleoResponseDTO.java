@@ -29,6 +29,7 @@ public class OfertaEmpleoResponseDTO {
     
     @Data
     public static class CategoriaDTO {
+        private String id;
         private String nombre;
     }
 } 

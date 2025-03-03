@@ -2,6 +2,7 @@ package ozoriani.empleomadrynbackend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
 import ozoriani.empleomadrynbackend.service.OfertaEmpleoService;
@@ -44,7 +45,14 @@ public class OfertaEmpleoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOferta(@PathVariable UUID id) {
-        ofertaEmpleoService.deleteOferta(id); // Esto lanzará ResourceNotFoundException si no existe
+        ofertaEmpleoService.deleteOferta(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/mis-avisos")
+    public ResponseEntity<List<OfertaEmpleoResponseDTO>> getUserJobPosts(Authentication authentication) {
+        String userEmail = authentication.getName(); // Obtiene el email del usuario desde el token JWT
+        List<OfertaEmpleoResponseDTO> userPosts = ofertaEmpleoService.getUserJobPosts(userEmail);
+        return ResponseEntity.ok(userPosts);
     }
 }

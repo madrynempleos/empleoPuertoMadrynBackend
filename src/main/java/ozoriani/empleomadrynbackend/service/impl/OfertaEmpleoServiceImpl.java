@@ -63,11 +63,18 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
     }
 
     @Override
-    public void deleteOferta(UUID id) { // Cambiado a void para lanzar excepción si falla
+    public void deleteOferta(UUID id) {
         if (!ofertaEmpleoRepository.existsById(id)) {
             throw new ResourceNotFoundException("Oferta de empleo no encontrada con ID: " + id);
         }
         ofertaEmpleoRepository.deleteById(id);
+    }
+
+    @Override
+    public List<OfertaEmpleoResponseDTO> getUserJobPosts(String userEmail) {
+        return ofertaEmpleoRepository.findByUsuarioEmail(userEmail).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     private void validateOfertaEmpleo(OfertaEmpleo ofertaEmpleo) {
@@ -110,7 +117,8 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
                     }
                     break;
                 case LINK:
-                    if (ofertaEmpleo.getLinkPostulacion() == null || ofertaEmpleo.getLinkPostulacion().trim().isEmpty()) {
+                    if (ofertaEmpleo.getLinkPostulacion() == null
+                            || ofertaEmpleo.getLinkPostulacion().trim().isEmpty()) {
                         errors.add("El link de postulación es requerido cuando la forma de postulación es por LINK");
                     } else if (!isValidUrl(ofertaEmpleo.getLinkPostulacion())) {
                         errors.add("El formato del link de postulación no es válido");
@@ -132,8 +140,8 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
     private boolean isValidUrl(String url) {
         try {
             URI uri = new URI(url);
-            return uri.getScheme() != null && 
-                   (uri.getScheme().equals("http") || uri.getScheme().equals("https"));
+            return uri.getScheme() != null &&
+                    (uri.getScheme().equals("http") || uri.getScheme().equals("https"));
         } catch (URISyntaxException e) {
             throw new ValidationException("El formato del link de postulación no es válido");
         }
@@ -144,26 +152,27 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
         dto.setId(ofertaEmpleo.getId());
         dto.setTitulo(ofertaEmpleo.getTitulo());
         dto.setDescripcion(ofertaEmpleo.getDescripcion());
-        
+
         OfertaEmpleoResponseDTO.UsuarioPublicadorDTO usuarioDTO = new OfertaEmpleoResponseDTO.UsuarioPublicadorDTO();
         usuarioDTO.setEmail(ofertaEmpleo.getUsuario().getEmail());
         dto.setUsuarioPublicador(usuarioDTO);
-        
+
         dto.setEmpresaConsultora(ofertaEmpleo.getEmpresaConsultora());
         dto.setFechaPublicacion(ofertaEmpleo.getFechaPublicacion());
         dto.setFechaCierre(ofertaEmpleo.getFechaCierre());
         dto.setFormaPostulacion(ofertaEmpleo.getFormaPostulacion().toString());
-        
+
         if (ofertaEmpleo.getFormaPostulacion() == FormaPostulacionEnum.MAIL) {
             dto.setContactoPostulacion(ofertaEmpleo.getEmailContacto());
         } else if (ofertaEmpleo.getFormaPostulacion() == FormaPostulacionEnum.LINK) {
             dto.setContactoPostulacion(ofertaEmpleo.getLinkPostulacion());
         }
-        
+
         OfertaEmpleoResponseDTO.CategoriaDTO categoriaDTO = new OfertaEmpleoResponseDTO.CategoriaDTO();
+        categoriaDTO.setId(ofertaEmpleo.getCategoria().getId().toString()); // Añadimos el id
         categoriaDTO.setNombre(ofertaEmpleo.getCategoria().getNombre());
         dto.setCategoria(categoriaDTO);
-        
+
         return dto;
     }
 }
