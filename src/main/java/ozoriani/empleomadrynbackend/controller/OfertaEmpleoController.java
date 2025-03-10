@@ -51,7 +51,7 @@ public class OfertaEmpleoController {
 
     @GetMapping("/mis-avisos")
     public ResponseEntity<List<OfertaEmpleoResponseDTO>> getUserJobPosts(Authentication authentication) {
-        String userEmail = authentication.getName(); // Obtiene el email del usuario desde el token JWT
+        String userEmail = authentication.getName();
         List<OfertaEmpleoResponseDTO> userPosts = ofertaEmpleoService.getUserJobPosts(userEmail);
         return ResponseEntity.ok(userPosts);
     }

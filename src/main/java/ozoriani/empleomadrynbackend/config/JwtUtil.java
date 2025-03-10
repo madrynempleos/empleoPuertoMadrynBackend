@@ -12,7 +12,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private static final long EXPIRATION_TIME = 86400000; // 24 horas
+    private static final long EXPIRATION_TIME = 86400000;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -44,6 +44,7 @@ public class JwtUtil {
                 .getSubject();
     }
 
+    @SuppressWarnings("deprecation")
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
