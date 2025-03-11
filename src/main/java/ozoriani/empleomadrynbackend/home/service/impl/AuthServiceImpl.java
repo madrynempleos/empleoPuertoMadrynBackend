@@ -1,4 +1,4 @@
-package ozoriani.empleomadrynbackend.service.impl;
+package ozoriani.empleomadrynbackend.home.service.impl;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ozoriani.empleomadrynbackend.config.JwtUtil;
-import ozoriani.empleomadrynbackend.model.Usuario;
-import ozoriani.empleomadrynbackend.repository.UsuarioRepository;
-import ozoriani.empleomadrynbackend.service.AuthService;
 import ozoriani.empleomadrynbackend.errors.exception.ValidationException;
+import ozoriani.empleomadrynbackend.home.model.entities.Usuario;
+import ozoriani.empleomadrynbackend.home.model.repository.UsuarioRepository;
+import ozoriani.empleomadrynbackend.home.service.AuthService;
 import ozoriani.empleomadrynbackend.errors.exception.SecurityException;
 
 import java.util.Collections;
@@ -34,7 +34,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Usuario authenticateWithGoogle(String tokenId, String googleId, String email, String name) {
-        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), GsonFactory.getDefaultInstance())
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(),
+                GsonFactory.getDefaultInstance())
                 .setAudience(Collections.singletonList(googleClientId))
                 .build();
 

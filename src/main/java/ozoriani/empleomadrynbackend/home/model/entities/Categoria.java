@@ -1,4 +1,4 @@
-package ozoriani.empleomadrynbackend.model;
+package ozoriani.empleomadrynbackend.home.model.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package ozoriani.empleomadrynbackend.dto;
+package ozoriani.empleomadrynbackend.home.model.dto;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -1,12 +1,12 @@
-package ozoriani.empleomadrynbackend.service.impl;
+package ozoriani.empleomadrynbackend.home.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ozoriani.empleomadrynbackend.errors.exception.InvalidOperationException;
 import ozoriani.empleomadrynbackend.errors.exception.ResourceNotFoundException;
-import ozoriani.empleomadrynbackend.model.Categoria;
-import ozoriani.empleomadrynbackend.repository.CategoriaRepository;
-import ozoriani.empleomadrynbackend.service.CategoriaService;
+import ozoriani.empleomadrynbackend.home.model.entities.Categoria;
+import ozoriani.empleomadrynbackend.home.model.repository.CategoriaRepository;
+import ozoriani.empleomadrynbackend.home.service.CategoriaService;
 
 import java.util.List;
 import java.util.UUID;

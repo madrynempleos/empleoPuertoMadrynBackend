@@ -1,8 +1,9 @@
-package ozoriani.empleomadrynbackend.repository;
+package ozoriani.empleomadrynbackend.home.model.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ozoriani.empleomadrynbackend.model.Categoria;
+
+import ozoriani.empleomadrynbackend.home.model.entities.Categoria;
 
 import java.util.UUID;
 

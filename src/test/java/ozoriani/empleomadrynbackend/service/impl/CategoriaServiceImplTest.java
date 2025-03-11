@@ -6,8 +6,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ozoriani.empleomadrynbackend.errors.exception.ResourceNotFoundException;
-import ozoriani.empleomadrynbackend.model.Categoria;
-import ozoriani.empleomadrynbackend.repository.CategoriaRepository;
+import ozoriani.empleomadrynbackend.home.model.entities.Categoria;
+import ozoriani.empleomadrynbackend.home.model.repository.CategoriaRepository;
+import ozoriani.empleomadrynbackend.home.service.impl.CategoriaServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -68,8 +69,7 @@ public class CategoriaServiceImplTest {
     public void getAllCategorias() {
         List<Categoria> categorias = Arrays.asList(
                 new Categoria(UUID.randomUUID(), "Arte"),
-                new Categoria(UUID.randomUUID(), "Ciencia")
-        );
+                new Categoria(UUID.randomUUID(), "Ciencia"));
         when(categoriaRepository.findAll()).thenReturn(categorias);
 
         List<Categoria> resultado = categoriaService.getAllCategorias();

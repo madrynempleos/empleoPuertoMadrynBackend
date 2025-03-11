@@ -1,12 +1,13 @@
-package ozoriani.empleomadrynbackend.repository;
+package ozoriani.empleomadrynbackend.home.model.repository;
 
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
-import java.util.List;
 
+import ozoriani.empleomadrynbackend.home.model.entities.OfertaEmpleo;
+
+import java.util.List;
 
 @Repository
 public interface OfertaEmpleoRepository extends JpaRepository<OfertaEmpleo, UUID> {

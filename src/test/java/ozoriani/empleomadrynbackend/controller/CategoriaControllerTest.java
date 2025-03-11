@@ -18,8 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ozoriani.empleomadrynbackend.model.Categoria;
-import ozoriani.empleomadrynbackend.service.CategoriaService;
+
+import ozoriani.empleomadrynbackend.home.controller.CategoriaController;
+import ozoriani.empleomadrynbackend.home.model.entities.Categoria;
+import ozoriani.empleomadrynbackend.home.service.CategoriaService;
 
 @ExtendWith(MockitoExtension.class)
 class CategoriaControllerTest {
@@ -50,8 +52,8 @@ class CategoriaControllerTest {
         when(categoriaService.createCategoria(any(Categoria.class))).thenReturn(categoria);
 
         mockMvc.perform(post("/api/categorias")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(categoria)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(categoria)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.nombre").value("Categoria Test"));
     }
@@ -81,8 +83,8 @@ class CategoriaControllerTest {
         when(categoriaService.updateCategoria(eq(categoriaId), any(Categoria.class))).thenReturn(updatedCategoria);
 
         mockMvc.perform(put("/api/categorias/{id}", categoriaId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedCategoria)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedCategoria)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Categoria Actualizada"));
     }

@@ -1,15 +1,15 @@
-package ozoriani.empleomadrynbackend.controller;
+package ozoriani.empleomadrynbackend.home.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import ozoriani.empleomadrynbackend.config.JwtUtil;
-import ozoriani.empleomadrynbackend.dto.AuthResponse;
-import ozoriani.empleomadrynbackend.dto.GoogleLoginRequest;
 import ozoriani.empleomadrynbackend.errors.exception.ValidationException;
-import ozoriani.empleomadrynbackend.model.Usuario;
-import ozoriani.empleomadrynbackend.service.AuthService;
+import ozoriani.empleomadrynbackend.home.model.dto.AuthResponse;
+import ozoriani.empleomadrynbackend.home.model.dto.GoogleLoginRequest;
+import ozoriani.empleomadrynbackend.home.model.entities.Usuario;
+import ozoriani.empleomadrynbackend.home.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -47,7 +47,7 @@ public class AuthController {
         }
 
         String token = authHeader.substring(7);
-        jwtUtil.validateToken(token); 
+        jwtUtil.validateToken(token);
         return ResponseEntity.ok().build();
     }
 }

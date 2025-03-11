@@ -1,7 +1,8 @@
-package ozoriani.empleomadrynbackend.controller;
+package ozoriani.empleomadrynbackend.home.controller;
 
-import ozoriani.empleomadrynbackend.model.Favoritos;
-import ozoriani.empleomadrynbackend.service.FavoritosService;
+import ozoriani.empleomadrynbackend.home.model.entities.Favoritos;
+import ozoriani.empleomadrynbackend.home.service.FavoritosService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,9 +24,8 @@ public class FavoritosController {
 
     @PostMapping("/{ofertaId}")
     public ResponseEntity<Favoritos> addFavorite(
-        @PathVariable UUID ofertaId,
-        Authentication authentication
-    ) {
+            @PathVariable UUID ofertaId,
+            Authentication authentication) {
         String userEmail = authentication.getName();
         Favoritos favorito = favoritosService.addFavorite(userEmail, ofertaId);
         return ResponseEntity.ok(favorito);
@@ -33,9 +33,8 @@ public class FavoritosController {
 
     @DeleteMapping("/{ofertaId}")
     public ResponseEntity<Void> removeFavorite(
-        @PathVariable UUID ofertaId,
-        Authentication authentication
-    ) {
+            @PathVariable UUID ofertaId,
+            Authentication authentication) {
         String userEmail = authentication.getName();
         favoritosService.removeFavorite(userEmail, ofertaId);
         return ResponseEntity.noContent().build();
@@ -50,9 +49,8 @@ public class FavoritosController {
 
     @GetMapping("/{ofertaId}/is-favorite")
     public ResponseEntity<Boolean> isFavorite(
-        @PathVariable UUID ofertaId,
-        Authentication authentication
-    ) {
+            @PathVariable UUID ofertaId,
+            Authentication authentication) {
         String userEmail = authentication.getName();
         boolean isFavorite = favoritosService.isFavorite(userEmail, ofertaId);
         return ResponseEntity.ok(isFavorite);

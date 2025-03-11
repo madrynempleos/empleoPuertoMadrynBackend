@@ -1,15 +1,17 @@
 package ozoriani.empleomadrynbackend.service.impl;
 
-import ozoriani.empleomadrynbackend.dto.OfertaEmpleoResponseDTO;
 import ozoriani.empleomadrynbackend.errors.exception.ResourceNotFoundException;
 import ozoriani.empleomadrynbackend.errors.exception.ValidationException;
-import ozoriani.empleomadrynbackend.model.Categoria;
-import ozoriani.empleomadrynbackend.model.FormaPostulacionEnum;
-import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
-import ozoriani.empleomadrynbackend.model.Usuario;
-import ozoriani.empleomadrynbackend.repository.CategoriaRepository;
-import ozoriani.empleomadrynbackend.repository.OfertaEmpleoRepository;
-import ozoriani.empleomadrynbackend.repository.UsuarioRepository;
+import ozoriani.empleomadrynbackend.home.model.dto.OfertaEmpleoResponseDTO;
+import ozoriani.empleomadrynbackend.home.model.entities.Categoria;
+import ozoriani.empleomadrynbackend.home.model.entities.FormaPostulacionEnum;
+import ozoriani.empleomadrynbackend.home.model.entities.OfertaEmpleo;
+import ozoriani.empleomadrynbackend.home.model.entities.Usuario;
+import ozoriani.empleomadrynbackend.home.model.repository.CategoriaRepository;
+import ozoriani.empleomadrynbackend.home.model.repository.OfertaEmpleoRepository;
+import ozoriani.empleomadrynbackend.home.model.repository.UsuarioRepository;
+import ozoriani.empleomadrynbackend.home.service.impl.OfertaEmpleoServiceImpl;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -125,7 +127,8 @@ public class OfertaEmpleoServiceImplTest {
     @Test
     public void testUpdateOferta_NotFound() {
         when(ofertaEmpleoRepository.existsById(any(UUID.class))).thenReturn(false);
-        assertThrows(ResourceNotFoundException.class, () -> ofertaEmpleoService.updateOferta(UUID.randomUUID(), ofertaEmpleo));
+        assertThrows(ResourceNotFoundException.class,
+                () -> ofertaEmpleoService.updateOferta(UUID.randomUUID(), ofertaEmpleo));
         verify(ofertaEmpleoRepository, times(1)).existsById(any(UUID.class));
     }
 

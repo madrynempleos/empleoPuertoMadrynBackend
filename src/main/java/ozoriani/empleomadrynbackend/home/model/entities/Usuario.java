@@ -1,4 +1,4 @@
-package ozoriani.empleomadrynbackend.model;
+package ozoriani.empleomadrynbackend.home.model.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,4 +28,3 @@ public class Usuario {
     @JsonManagedReference
     private List<OfertaEmpleo> publicaciones = new ArrayList<>();
 }
-

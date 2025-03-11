@@ -1,12 +1,14 @@
 package ozoriani.empleomadrynbackend.controller;
 
-import ozoriani.empleomadrynbackend.dto.OfertaEmpleoResponseDTO;
 import ozoriani.empleomadrynbackend.errors.exception.ResourceNotFoundException;
-import ozoriani.empleomadrynbackend.model.Categoria;
-import ozoriani.empleomadrynbackend.model.FormaPostulacionEnum;
-import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
-import ozoriani.empleomadrynbackend.model.Usuario;
-import ozoriani.empleomadrynbackend.service.OfertaEmpleoService;
+import ozoriani.empleomadrynbackend.home.controller.OfertaEmpleoController;
+import ozoriani.empleomadrynbackend.home.model.dto.OfertaEmpleoResponseDTO;
+import ozoriani.empleomadrynbackend.home.model.entities.Categoria;
+import ozoriani.empleomadrynbackend.home.model.entities.FormaPostulacionEnum;
+import ozoriani.empleomadrynbackend.home.model.entities.OfertaEmpleo;
+import ozoriani.empleomadrynbackend.home.model.entities.Usuario;
+import ozoriani.empleomadrynbackend.home.service.OfertaEmpleoService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -93,7 +95,8 @@ public class OfertaEmpleoControllerTest {
 
     @Test
     public void testGetOfertaById_NotFound() {
-        when(ofertaEmpleoService.getOfertaById(any(UUID.class))).thenThrow(new ResourceNotFoundException("Oferta no encontrada"));
+        when(ofertaEmpleoService.getOfertaById(any(UUID.class)))
+                .thenThrow(new ResourceNotFoundException("Oferta no encontrada"));
         assertThrows(ResourceNotFoundException.class, () -> ofertaEmpleoController.getOfertaById(UUID.randomUUID()));
         verify(ofertaEmpleoService, times(1)).getOfertaById(any(UUID.class));
     }
@@ -111,7 +114,8 @@ public class OfertaEmpleoControllerTest {
     public void testUpdateOferta_NotFound() {
         when(ofertaEmpleoService.updateOferta(any(UUID.class), any(OfertaEmpleo.class)))
                 .thenThrow(new ResourceNotFoundException("Oferta no encontrada"));
-        assertThrows(ResourceNotFoundException.class, () -> ofertaEmpleoController.updateOferta(UUID.randomUUID(), ofertaEmpleo));
+        assertThrows(ResourceNotFoundException.class,
+                () -> ofertaEmpleoController.updateOferta(UUID.randomUUID(), ofertaEmpleo));
         verify(ofertaEmpleoService, times(1)).updateOferta(any(UUID.class), eq(ofertaEmpleo));
     }
 
@@ -125,7 +129,8 @@ public class OfertaEmpleoControllerTest {
 
     @Test
     public void testDeleteOferta_NotFound() {
-        doThrow(new ResourceNotFoundException("Oferta no encontrada")).when(ofertaEmpleoService).deleteOferta(any(UUID.class));
+        doThrow(new ResourceNotFoundException("Oferta no encontrada")).when(ofertaEmpleoService)
+                .deleteOferta(any(UUID.class));
         assertThrows(ResourceNotFoundException.class, () -> ofertaEmpleoController.deleteOferta(UUID.randomUUID()));
         verify(ofertaEmpleoService, times(1)).deleteOferta(any(UUID.class));
     }

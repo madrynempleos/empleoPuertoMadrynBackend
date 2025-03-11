@@ -1,14 +1,15 @@
-package ozoriani.empleomadrynbackend.service.impl;
+package ozoriani.empleomadrynbackend.home.service.impl;
 
-import ozoriani.empleomadrynbackend.dto.OfertaEmpleoResponseDTO;
 import ozoriani.empleomadrynbackend.errors.exception.ResourceNotFoundException;
 import ozoriani.empleomadrynbackend.errors.exception.ValidationException;
-import ozoriani.empleomadrynbackend.model.FormaPostulacionEnum;
-import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
-import ozoriani.empleomadrynbackend.repository.CategoriaRepository;
-import ozoriani.empleomadrynbackend.repository.OfertaEmpleoRepository;
-import ozoriani.empleomadrynbackend.repository.UsuarioRepository;
-import ozoriani.empleomadrynbackend.service.OfertaEmpleoService;
+import ozoriani.empleomadrynbackend.home.model.dto.OfertaEmpleoResponseDTO;
+import ozoriani.empleomadrynbackend.home.model.entities.FormaPostulacionEnum;
+import ozoriani.empleomadrynbackend.home.model.entities.OfertaEmpleo;
+import ozoriani.empleomadrynbackend.home.model.repository.CategoriaRepository;
+import ozoriani.empleomadrynbackend.home.model.repository.OfertaEmpleoRepository;
+import ozoriani.empleomadrynbackend.home.model.repository.UsuarioRepository;
+import ozoriani.empleomadrynbackend.home.service.OfertaEmpleoService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,8 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
     private final CategoriaRepository categoriaRepository;
 
     @Autowired
-    public OfertaEmpleoServiceImpl(OfertaEmpleoRepository ofertaEmpleoRepository, UsuarioRepository usuarioRepository, CategoriaRepository categoriaRepository) {
+    public OfertaEmpleoServiceImpl(OfertaEmpleoRepository ofertaEmpleoRepository, UsuarioRepository usuarioRepository,
+            CategoriaRepository categoriaRepository) {
         this.ofertaEmpleoRepository = ofertaEmpleoRepository;
         this.usuarioRepository = usuarioRepository;
         this.categoriaRepository = categoriaRepository;

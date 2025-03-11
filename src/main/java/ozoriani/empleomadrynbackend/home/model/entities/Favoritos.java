@@ -1,4 +1,4 @@
-package ozoriani.empleomadrynbackend.model;
+package ozoriani.empleomadrynbackend.home.model.entities;
 
 import java.util.UUID;
 
@@ -27,4 +27,3 @@ public class Favoritos {
     private OfertaEmpleo ofertaEmpleo;
 
 }
-

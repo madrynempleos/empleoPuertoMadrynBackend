@@ -1,12 +1,13 @@
-package ozoriani.empleomadrynbackend.controller;
+package ozoriani.empleomadrynbackend.home.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ozoriani.empleomadrynbackend.model.OfertaEmpleo;
-import ozoriani.empleomadrynbackend.service.OfertaEmpleoService;
-import ozoriani.empleomadrynbackend.dto.OfertaEmpleoResponseDTO;
+
+import ozoriani.empleomadrynbackend.home.model.dto.OfertaEmpleoResponseDTO;
+import ozoriani.empleomadrynbackend.home.model.entities.OfertaEmpleo;
+import ozoriani.empleomadrynbackend.home.service.OfertaEmpleoService;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -42,7 +43,8 @@ public class OfertaEmpleoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OfertaEmpleo> updateOferta(@PathVariable UUID id, @Valid @RequestBody OfertaEmpleo ofertaEmpleo) {
+    public ResponseEntity<OfertaEmpleo> updateOferta(@PathVariable UUID id,
+            @Valid @RequestBody OfertaEmpleo ofertaEmpleo) {
         OfertaEmpleo ofertaActualizada = ofertaEmpleoService.updateOferta(id, ofertaEmpleo);
         return ResponseEntity.ok(ofertaActualizada);
     }
