@@ -16,8 +16,12 @@ import java.util.UUID;
 @RequestMapping("/api/ofertas")
 public class OfertaEmpleoController {
 
+    private final OfertaEmpleoService ofertaEmpleoService;
+
     @Autowired
-    private OfertaEmpleoService ofertaEmpleoService;
+    public OfertaEmpleoController(OfertaEmpleoService ofertaEmpleoService) {
+        this.ofertaEmpleoService = ofertaEmpleoService;
+    }
 
     @PostMapping
     public ResponseEntity<OfertaEmpleo> createOferta(@Valid @RequestBody OfertaEmpleo ofertaEmpleo) {

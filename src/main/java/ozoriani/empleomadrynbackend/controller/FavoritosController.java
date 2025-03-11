@@ -14,8 +14,12 @@ import java.util.UUID;
 @RequestMapping("/api/favoritos")
 public class FavoritosController {
 
+    private final FavoritosService favoritosService;
+
     @Autowired
-    private FavoritosService favoritosService;
+    public FavoritosController(FavoritosService favoritosService) {
+        this.favoritosService = favoritosService;
+    }
 
     @PostMapping("/{ofertaId}")
     public ResponseEntity<Favoritos> addFavorite(

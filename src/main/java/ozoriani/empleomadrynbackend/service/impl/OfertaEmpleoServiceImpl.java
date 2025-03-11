@@ -23,14 +23,18 @@ import java.util.stream.Collectors;
 @Service
 public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
 
-    @Autowired
-    private OfertaEmpleoRepository ofertaEmpleoRepository;
+    private final OfertaEmpleoRepository ofertaEmpleoRepository;
+
+    private final UsuarioRepository usuarioRepository;
+
+    private final CategoriaRepository categoriaRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private CategoriaRepository categoriaRepository;
+    public OfertaEmpleoServiceImpl(OfertaEmpleoRepository ofertaEmpleoRepository, UsuarioRepository usuarioRepository, CategoriaRepository categoriaRepository) {
+        this.ofertaEmpleoRepository = ofertaEmpleoRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.categoriaRepository = categoriaRepository;
+    }
 
     @Override
     public OfertaEmpleo createOferta(OfertaEmpleo ofertaEmpleo) {

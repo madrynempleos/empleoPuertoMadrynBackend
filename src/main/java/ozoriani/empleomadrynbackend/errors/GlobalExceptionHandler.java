@@ -87,7 +87,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex, WebRequest request) {
+            WebRequest request) {
         ApiError apiError = new ApiError(
             HttpStatus.BAD_REQUEST.value(),
             "Formato de solicitud inválido",
@@ -115,7 +115,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiError> handleDataIntegrityViolation(
-            DataIntegrityViolationException ex, WebRequest request) {
+            WebRequest request) {
         ApiError apiError = new ApiError(
             HttpStatus.CONFLICT.value(),
             "Error de integridad de datos",
@@ -139,7 +139,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGlobalException(
-            Exception ex, WebRequest request) {
+            WebRequest request) {
         ApiError apiError = new ApiError(
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             "Error interno del servidor",

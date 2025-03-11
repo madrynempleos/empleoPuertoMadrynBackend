@@ -18,14 +18,18 @@ import java.util.UUID;
 @Service
 public class FavoritosServiceImpl implements FavoritosService {
 
-    @Autowired
-    private FavoritosRepository favoritosRepository;
+    private final FavoritosRepository favoritosRepository;
+
+    private final UsuarioRepository usuarioRepository;
+
+    private final OfertaEmpleoRepository ofertaEmpleoRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private OfertaEmpleoRepository ofertaEmpleoRepository;
+    public FavoritosServiceImpl(FavoritosRepository favoritosRepository, UsuarioRepository usuarioRepository, OfertaEmpleoRepository ofertaEmpleoRepository) {
+        this.favoritosRepository = favoritosRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.ofertaEmpleoRepository = ofertaEmpleoRepository;
+    }
 
     @Override
     public Favoritos addFavorite(String userEmail, UUID ofertaId) {
@@ -49,13 +53,11 @@ public class FavoritosServiceImpl implements FavoritosService {
         Usuario usuario = usuarioRepository.findByEmail(userEmail)
             .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con email: " + userEmail));
         
-        // Buscar el favorito por ID de usuario y oferta
         Optional<Favoritos> favorito = favoritosRepository.findByUsuarioIdAndOfertaEmpleoId(usuario.getId(), ofertaId);
-        if (!favorito.isPresent()) {
+        if (favorito.isEmpty()) {
             throw new ResourceNotFoundException("El favorito no existe para usuario: " + userEmail + " y oferta: " + ofertaId);
         }
 
-        // Eliminar el favorito por su ID en lugar de usar deleteByUsuarioIdAndOfertaEmpleoId
         favoritosRepository.delete(favorito.get());
     }
 

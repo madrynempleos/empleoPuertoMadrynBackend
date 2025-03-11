@@ -1,5 +1,8 @@
 package ozoriani.empleomadrynbackend.dto;
 
+import lombok.Data;
+
+@Data
 public class AuthResponse {
     private String token;
     private String usuarioId;
@@ -7,13 +10,5 @@ public class AuthResponse {
     public AuthResponse(String id, String token) {
         this.usuarioId = id;
         this.token = token;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public String getId() {
-        return usuarioId;
     }
 }

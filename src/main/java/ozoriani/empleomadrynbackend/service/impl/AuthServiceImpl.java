@@ -19,13 +19,18 @@ import java.util.Collections;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
+
+    @Autowired
+    public AuthServiceImpl(UsuarioRepository usuarioRepository, JwtUtil jwtUtil) {
+        this.usuarioRepository = usuarioRepository;
+        this.jwtUtil = jwtUtil;
+    }
 
     @Override
     public Usuario authenticateWithGoogle(String tokenId, String googleId, String email, String name) {
