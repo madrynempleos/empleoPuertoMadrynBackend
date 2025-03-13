@@ -86,7 +86,6 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
     private void validateOfertaEmpleo(OfertaEmpleo ofertaEmpleo) {
         List<String> errors = new ArrayList<>();
 
-        // Validación de Usuario Publicador
         if (ofertaEmpleo.getUsuario() == null || ofertaEmpleo.getUsuario().getId() == null) {
             errors.add("El usuario publicador es requerido");
         } else if (!usuarioRepository.existsById(ofertaEmpleo.getUsuario().getId())) {

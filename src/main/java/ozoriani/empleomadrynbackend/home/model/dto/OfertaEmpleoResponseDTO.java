@@ -12,14 +12,13 @@ public class OfertaEmpleoResponseDTO {
     private String titulo;
     private String descripcion;
     
-    // Datos del usuario publicador
     private UsuarioPublicadorDTO usuarioPublicador;
     
     private String empresaConsultora;
     private LocalDateTime fechaPublicacion;
     private LocalDateTime fechaCierre;
     private String formaPostulacion;
-    private String contactoPostulacion; // email o link según corresponda
+    private String contactoPostulacion; 
     private CategoriaDTO categoria;
     
     @Data
