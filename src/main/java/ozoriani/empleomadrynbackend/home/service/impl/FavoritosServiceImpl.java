@@ -9,6 +9,7 @@ import ozoriani.empleomadrynbackend.home.model.repository.OfertaEmpleoRepository
 import ozoriani.empleomadrynbackend.home.model.repository.UsuarioRepository;
 import ozoriani.empleomadrynbackend.home.service.FavoritosService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class FavoritosServiceImpl implements FavoritosService {
 
     private final OfertaEmpleoRepository ofertaEmpleoRepository;
 
+    @Autowired
     public FavoritosServiceImpl(FavoritosRepository favoritosRepository, UsuarioRepository usuarioRepository,
             OfertaEmpleoRepository ofertaEmpleoRepository) {
         this.favoritosRepository = favoritosRepository;

@@ -3,6 +3,7 @@ package ozoriani.empleomadrynbackend.home.controller;
 import ozoriani.empleomadrynbackend.home.model.entities.Favoritos;
 import ozoriani.empleomadrynbackend.home.service.FavoritosService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ public class FavoritosController {
 
     private final FavoritosService favoritosService;
 
+    @Autowired
     public FavoritosController(FavoritosService favoritosService) {
         this.favoritosService = favoritosService;
     }

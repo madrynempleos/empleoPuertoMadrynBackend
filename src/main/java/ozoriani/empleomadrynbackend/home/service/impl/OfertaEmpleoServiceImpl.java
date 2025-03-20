@@ -10,6 +10,7 @@ import ozoriani.empleomadrynbackend.home.model.repository.OfertaEmpleoRepository
 import ozoriani.empleomadrynbackend.home.model.repository.UsuarioRepository;
 import ozoriani.empleomadrynbackend.home.service.OfertaEmpleoService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -29,6 +30,7 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
 
     private final CategoriaRepository categoriaRepository;
 
+    @Autowired
     public OfertaEmpleoServiceImpl(OfertaEmpleoRepository ofertaEmpleoRepository, UsuarioRepository usuarioRepository,
             CategoriaRepository categoriaRepository) {
         this.ofertaEmpleoRepository = ofertaEmpleoRepository;

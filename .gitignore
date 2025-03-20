@@ -9,9 +9,6 @@ target/
 ### PEM ###
 *.pem
 
-### History ###
-.history
-
 ### STS ###
 .apt_generated
 .classpath
