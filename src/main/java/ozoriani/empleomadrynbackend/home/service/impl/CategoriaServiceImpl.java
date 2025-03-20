@@ -1,6 +1,5 @@
 package ozoriani.empleomadrynbackend.home.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ozoriani.empleomadrynbackend.errors.exception.InvalidOperationException;
 import ozoriani.empleomadrynbackend.errors.exception.ResourceNotFoundException;
@@ -16,7 +15,6 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
 
-    @Autowired
     public CategoriaServiceImpl(CategoriaRepository categoriaRepository) {
         this.categoriaRepository = categoriaRepository;
     }
