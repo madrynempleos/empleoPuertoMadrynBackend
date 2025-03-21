@@ -1,6 +1,5 @@
 package ozoriani.empleomadrynbackend.home.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,6 @@ public class OfertaEmpleoController {
 
     private final OfertaEmpleoService ofertaEmpleoService;
 
-    @Autowired
     public OfertaEmpleoController(OfertaEmpleoService ofertaEmpleoService) {
         this.ofertaEmpleoService = ofertaEmpleoService;
     }

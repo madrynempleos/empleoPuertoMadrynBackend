@@ -4,7 +4,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ozoriani.empleomadrynbackend.config.JwtUtil;
@@ -14,6 +13,8 @@ import ozoriani.empleomadrynbackend.home.model.repository.UsuarioRepository;
 import ozoriani.empleomadrynbackend.home.service.AuthService;
 import ozoriani.empleomadrynbackend.errors.exception.SecurityException;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Collections;
 
 @Service
@@ -26,7 +27,6 @@ public class AuthServiceImpl implements AuthService {
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
 
-    @Autowired
     public AuthServiceImpl(UsuarioRepository usuarioRepository, JwtUtil jwtUtil) {
         this.usuarioRepository = usuarioRepository;
         this.jwtUtil = jwtUtil;
@@ -42,9 +42,10 @@ public class AuthServiceImpl implements AuthService {
         GoogleIdToken idToken;
         try {
             idToken = verifier.verify(tokenId);
-        } catch (Exception e) {
+        } catch (GeneralSecurityException | IOException e) {
             throw new SecurityException("Error al verificar el token de Google: " + e.getMessage());
         }
+            
 
         if (idToken == null) {
             throw new ValidationException("Token de Google inválido");

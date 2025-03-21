@@ -3,7 +3,6 @@ package ozoriani.empleomadrynbackend.config;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +25,6 @@ public class SecurityConfig {
   @Value("${cors.allowed-origins}")
   private List<String> allowedOrigins;
 
-  @Autowired
   public SecurityConfig (JwtAuthenticationFilter jwtAuthenticationFilter) {
     this.jwtAuthenticationFilter = jwtAuthenticationFilter;
   }
@@ -41,6 +39,7 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.GET, "/api/ofertas").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/categorias").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/ofertas/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/contacto").permitAll()
             .requestMatchers("/api/ofertas").authenticated()
             .anyRequest().authenticated())
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

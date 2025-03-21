@@ -10,7 +10,6 @@ import ozoriani.empleomadrynbackend.home.model.repository.OfertaEmpleoRepository
 import ozoriani.empleomadrynbackend.home.model.repository.UsuarioRepository;
 import ozoriani.empleomadrynbackend.home.service.OfertaEmpleoService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -30,7 +29,6 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
 
     private final CategoriaRepository categoriaRepository;
 
-    @Autowired
     public OfertaEmpleoServiceImpl(OfertaEmpleoRepository ofertaEmpleoRepository, UsuarioRepository usuarioRepository,
             CategoriaRepository categoriaRepository) {
         this.ofertaEmpleoRepository = ofertaEmpleoRepository;
@@ -114,21 +112,21 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
             errors.add("La forma de postulación es requerida");
         } else {
             switch (ofertaEmpleo.getFormaPostulacion()) {
-                case MAIL:
+                case MAIL -> {
                     if (ofertaEmpleo.getEmailContacto() == null || ofertaEmpleo.getEmailContacto().trim().isEmpty()) {
                         errors.add("El email de contacto es requerido cuando la forma de postulación es por MAIL");
                     } else if (!isValidEmail(ofertaEmpleo.getEmailContacto())) {
                         errors.add("El formato del email de contacto no es válido");
                     }
-                    break;
-                case LINK:
+                }
+                case LINK -> {
                     if (ofertaEmpleo.getLinkPostulacion() == null
                             || ofertaEmpleo.getLinkPostulacion().trim().isEmpty()) {
                         errors.add("El link de postulación es requerido cuando la forma de postulación es por LINK");
                     } else if (!isValidUrl(ofertaEmpleo.getLinkPostulacion())) {
                         errors.add("El formato del link de postulación no es válido");
                     }
-                    break;
+                }
             }
         }
 

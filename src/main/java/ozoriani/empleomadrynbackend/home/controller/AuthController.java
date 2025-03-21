@@ -1,6 +1,5 @@
 package ozoriani.empleomadrynbackend.home.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -19,7 +18,6 @@ public class AuthController {
 
     private final JwtUtil jwtUtil;
 
-    @Autowired
     public AuthController(AuthService authService, JwtUtil jwtUtil) {
         this.authService = authService;
         this.jwtUtil = jwtUtil;
