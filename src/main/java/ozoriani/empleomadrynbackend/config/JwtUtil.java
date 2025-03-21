@@ -44,6 +44,7 @@ public class JwtUtil {
                 .getSubject();
     }
 
+    @SuppressWarnings("deprecation")
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -55,6 +56,8 @@ public class JwtUtil {
             throw new SecurityException("Token JWT expirado");
         } catch (MalformedJwtException e) {
             throw new SecurityException("Token JWT inválido");
+        } catch (SignatureException e) {
+            throw new SecurityException("Error al validar la firma del token JWT");
         } catch (Exception e) {
             throw new SecurityException("Error inesperado al validar el token JWT");
         }

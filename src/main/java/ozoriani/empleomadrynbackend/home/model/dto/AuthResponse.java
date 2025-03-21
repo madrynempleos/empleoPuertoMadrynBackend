@@ -7,8 +7,8 @@ public class AuthResponse {
     private String token;
     private String usuarioId;
 
-    public AuthResponse(String id, String token) {
-        this.usuarioId = id;
+    public AuthResponse(String usuarioId, String token) {
+        this.usuarioId = usuarioId;
         this.token = token;
     }
 }
