@@ -58,9 +58,14 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
 
     @Override
     public OfertaEmpleo updateOferta(UUID id, OfertaEmpleo ofertaEmpleo) {
+        OfertaEmpleo existingOferta = ofertaEmpleoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Oferta de empleo no encontrada con ID: " + id));
+
         if (!ofertaEmpleoRepository.existsById(id)) {
             throw new ResourceNotFoundException("Oferta de empleo no encontrada con ID: " + id);
         }
+
+        ofertaEmpleo.setFechaPublicacion(existingOferta.getFechaPublicacion());
         validateOfertaEmpleo(ofertaEmpleo);
         ofertaEmpleo.setId(id);
         return ofertaEmpleoRepository.save(ofertaEmpleo);
@@ -172,9 +177,11 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
         }
 
         OfertaEmpleoResponseDTO.CategoriaDTO categoriaDTO = new OfertaEmpleoResponseDTO.CategoriaDTO();
-        categoriaDTO.setId(ofertaEmpleo.getCategoria().getId().toString()); // Añadimos el id
+        categoriaDTO.setId(ofertaEmpleo.getCategoria().getId().toString()); 
         categoriaDTO.setNombre(ofertaEmpleo.getCategoria().getNombre());
         dto.setCategoria(categoriaDTO);
+
+        dto.setLogoUrl(ofertaEmpleo.getLogoUrl());
 
         return dto;
     }

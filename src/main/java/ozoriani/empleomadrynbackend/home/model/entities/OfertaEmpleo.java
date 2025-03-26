@@ -1,9 +1,12 @@
 package ozoriani.empleomadrynbackend.home.model.entities;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.validation.constraints.*;
@@ -58,4 +61,25 @@ public class OfertaEmpleo {
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
+
+    @Column(nullable = true)
+    private String logoUrl;
+
+    // Setter personalizado para usuario
+    @JsonSetter("usuario")
+    public void setUsuario(Map<String, String> usuarioMap) {
+        if (usuarioMap != null && usuarioMap.containsKey("id")) {
+            this.usuario = new Usuario();
+            this.usuario.setId(UUID.fromString(usuarioMap.get("id")));
+        }
+    }
+
+    // Setter personalizado para categoria
+    @JsonSetter("categoria")
+    public void setCategoria(Map<String, String> categoriaMap) {
+        if (categoriaMap != null && categoriaMap.containsKey("id")) {
+            this.categoria = new Categoria();
+            this.categoria.setId(UUID.fromString(categoriaMap.get("id")));
+        }
+    }
 }

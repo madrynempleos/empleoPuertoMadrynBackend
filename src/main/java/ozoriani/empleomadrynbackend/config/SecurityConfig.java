@@ -40,6 +40,7 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.GET, "/api/categorias").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/ofertas/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/contacto").permitAll()
+            .requestMatchers("/uploads/**").permitAll()
             .requestMatchers("/api/ofertas").authenticated()
             .anyRequest().authenticated())
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

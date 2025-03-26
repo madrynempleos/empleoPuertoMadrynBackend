@@ -20,6 +20,7 @@ public class OfertaEmpleoResponseDTO {
     private String formaPostulacion;
     private String contactoPostulacion; 
     private CategoriaDTO categoria;
+    private String logoUrl;
     
     @Data
     public static class UsuarioPublicadorDTO {
