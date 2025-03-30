@@ -65,7 +65,9 @@ public class OfertaEmpleo {
     @Column(nullable = true)
     private String logoUrl;
 
-    // Setter personalizado para usuario
+    @Column(nullable = false)
+    private boolean habilitado = false;
+
     @JsonSetter("usuario")
     public void setUsuario(Map<String, String> usuarioMap) {
         if (usuarioMap != null && usuarioMap.containsKey("id")) {
@@ -74,7 +76,6 @@ public class OfertaEmpleo {
         }
     }
 
-    // Setter personalizado para categoria
     @JsonSetter("categoria")
     public void setCategoria(Map<String, String> categoriaMap) {
         if (categoriaMap != null && categoriaMap.containsKey("id")) {

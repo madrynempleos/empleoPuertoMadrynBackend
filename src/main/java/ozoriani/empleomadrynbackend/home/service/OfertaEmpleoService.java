@@ -18,4 +18,10 @@ public interface OfertaEmpleoService {
     void deleteOferta(UUID id);
 
     List<OfertaEmpleoResponseDTO> getUserJobPosts(String userEmail);
+
+    List<OfertaEmpleoResponseDTO> getOfertasNoHabilitadas();
+
+    OfertaEmpleo habilitarOferta(UUID id);
+
+    OfertaEmpleoResponseDTO convertToDTO(OfertaEmpleo ofertaEmpleo) ;
 }
