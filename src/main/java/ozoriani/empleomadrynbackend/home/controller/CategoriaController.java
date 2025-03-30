@@ -38,7 +38,7 @@ public class CategoriaController {
         return ResponseEntity.ok(categoriaService.getCategoriaById(id));
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<Categoria> updateCategoria(@PathVariable UUID id, @Valid @RequestBody Categoria categoria) {
         return ResponseEntity.ok(categoriaService.updateCategoria(id, categoria));
     }

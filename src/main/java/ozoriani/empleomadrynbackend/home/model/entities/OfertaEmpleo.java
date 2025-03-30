@@ -65,6 +65,8 @@ public class OfertaEmpleo {
     @Column(nullable = true)
     private String logoUrl;
 
+    private Boolean habilitado = false;
+
     // Setter personalizado para usuario
     @JsonSetter("usuario")
     public void setUsuario(Map<String, String> usuarioMap) {

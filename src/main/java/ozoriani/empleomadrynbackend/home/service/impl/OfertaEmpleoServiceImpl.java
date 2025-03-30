@@ -8,6 +8,7 @@ import ozoriani.empleomadrynbackend.home.model.entities.OfertaEmpleo;
 import ozoriani.empleomadrynbackend.home.model.repository.CategoriaRepository;
 import ozoriani.empleomadrynbackend.home.model.repository.OfertaEmpleoRepository;
 import ozoriani.empleomadrynbackend.home.model.repository.UsuarioRepository;
+import ozoriani.empleomadrynbackend.home.service.EmailService;
 import ozoriani.empleomadrynbackend.home.service.OfertaEmpleoService;
 
 import org.springframework.stereotype.Service;
@@ -29,16 +30,21 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
 
     private final CategoriaRepository categoriaRepository;
 
+    private final EmailService emailService;
+
     public OfertaEmpleoServiceImpl(OfertaEmpleoRepository ofertaEmpleoRepository, UsuarioRepository usuarioRepository,
-            CategoriaRepository categoriaRepository) {
+            CategoriaRepository categoriaRepository, EmailService emailService) {
         this.ofertaEmpleoRepository = ofertaEmpleoRepository;
         this.usuarioRepository = usuarioRepository;
         this.categoriaRepository = categoriaRepository;
+        this.emailService = emailService;
     }
 
     @Override
     public OfertaEmpleo createOferta(OfertaEmpleo ofertaEmpleo) {
         validateOfertaEmpleo(ofertaEmpleo);
+        emailService.enviarCorreoAviso(ofertaEmpleo);
+        emailService.enviarCorreoAvisoEmpresa(ofertaEmpleo);
         return ofertaEmpleoRepository.save(ofertaEmpleo);
     }
 
@@ -182,6 +188,7 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
         dto.setCategoria(categoriaDTO);
 
         dto.setLogoUrl(ofertaEmpleo.getLogoUrl());
+        dto.setHabilitado(ofertaEmpleo.getHabilitado());
 
         return dto;
     }

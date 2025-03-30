@@ -27,8 +27,11 @@ public class JwtUtil {
             throw new IllegalArgumentException("El email no puede ser nulo o vacío");
         }
 
+        String rol = email.equals("empleospuertomadryn@gmail.com") ? "ADMIN" : "USER";
+
         return Jwts.builder()
                 .setSubject(email)
+                .claim("role", rol)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -42,6 +45,15 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public String extractRole(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
     }
 
     @SuppressWarnings("deprecation")
