@@ -7,6 +7,7 @@ import ozoriani.empleomadrynbackend.home.model.repository.CategoriaRepository;
 import ozoriani.empleomadrynbackend.home.model.repository.OfertaEmpleoRepository;
 import ozoriani.empleomadrynbackend.home.model.repository.UsuarioRepository;
 import ozoriani.empleomadrynbackend.home.service.AdminService;
+import ozoriani.empleomadrynbackend.home.service.EmailService;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,13 @@ public class AdminServiceImpl implements AdminService {
 
     private final Map<String, JpaRepository<?, UUID>> repositories = new HashMap<>();
 
-    public AdminServiceImpl(OfertaEmpleoRepository ofertaRepository, CategoriaRepository categoriaRepository, UsuarioRepository usuarioRepository) {
+    private final EmailService emailService;
+
+    public AdminServiceImpl(OfertaEmpleoRepository ofertaRepository, CategoriaRepository categoriaRepository, UsuarioRepository usuarioRepository, EmailService emailService) {
         repositories.put("Oferta", ofertaRepository);
         repositories.put("Categoria", categoriaRepository);
         repositories.put("Usuario", usuarioRepository);
+        this.emailService = emailService;
     }
 
     @Override
@@ -77,6 +81,7 @@ public class AdminServiceImpl implements AdminService {
         }
         oferta.setHabilitado(true);
         ofertaRepository.save(oferta);
+        emailService.enviarCorreoAvisoEmpresa(oferta);
     }
 
     private JpaRepository<?, UUID> getRepository(String entityName) {

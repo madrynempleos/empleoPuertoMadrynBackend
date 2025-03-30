@@ -44,7 +44,6 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
     public OfertaEmpleo createOferta(OfertaEmpleo ofertaEmpleo) {
         validateOfertaEmpleo(ofertaEmpleo);
         emailService.enviarCorreoAviso(ofertaEmpleo);
-        emailService.enviarCorreoAvisoEmpresa(ofertaEmpleo);
         return ofertaEmpleoRepository.save(ofertaEmpleo);
     }
 
