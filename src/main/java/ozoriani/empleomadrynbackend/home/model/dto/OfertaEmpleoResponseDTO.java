@@ -21,7 +21,6 @@ public class OfertaEmpleoResponseDTO {
     private String contactoPostulacion; 
     private CategoriaDTO categoria;
     private String logoUrl;
-    private boolean habilitado;
     
     @Data
     public static class UsuarioPublicadorDTO {

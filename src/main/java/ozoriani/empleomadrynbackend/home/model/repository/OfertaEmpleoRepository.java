@@ -12,5 +12,4 @@ import java.util.List;
 @Repository
 public interface OfertaEmpleoRepository extends JpaRepository<OfertaEmpleo, UUID> {
     List<OfertaEmpleo> findByUsuarioEmail(String email);
-    List<OfertaEmpleo> findByHabilitadoFalse();
 }

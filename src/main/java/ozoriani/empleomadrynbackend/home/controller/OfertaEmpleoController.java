@@ -117,16 +117,4 @@ public class OfertaEmpleoController {
         List<OfertaEmpleoResponseDTO> userPosts = ofertaEmpleoService.getUserJobPosts(userEmail);
         return ResponseEntity.ok(userPosts);
     }
-
-    @GetMapping("/no-habilitadas")
-    public ResponseEntity<List<OfertaEmpleoResponseDTO>> getOfertasNoHabilitadas() {
-        List<OfertaEmpleoResponseDTO> ofertas = ofertaEmpleoService.getOfertasNoHabilitadas();
-        return ResponseEntity.ok(ofertas);
-    }
-
-    @PatchMapping("/{id}/habilitar")
-    public ResponseEntity<OfertaEmpleoResponseDTO> habilitarOferta(@PathVariable UUID id) {
-        OfertaEmpleo oferta = ofertaEmpleoService.habilitarOferta(id);
-        return ResponseEntity.ok(ofertaEmpleoService.convertToDTO(oferta)); 
-    }
 }

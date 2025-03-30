@@ -8,7 +8,6 @@ import ozoriani.empleomadrynbackend.home.model.entities.OfertaEmpleo;
 import ozoriani.empleomadrynbackend.home.model.repository.CategoriaRepository;
 import ozoriani.empleomadrynbackend.home.model.repository.OfertaEmpleoRepository;
 import ozoriani.empleomadrynbackend.home.model.repository.UsuarioRepository;
-import ozoriani.empleomadrynbackend.home.service.FileStorageService;
 import ozoriani.empleomadrynbackend.home.service.OfertaEmpleoService;
 
 import org.springframework.stereotype.Service;
@@ -25,13 +24,13 @@ import java.util.stream.Collectors;
 public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
 
     private final OfertaEmpleoRepository ofertaEmpleoRepository;
+
     private final UsuarioRepository usuarioRepository;
+
     private final CategoriaRepository categoriaRepository;
-    private final FileStorageService fileStorageService;
 
     public OfertaEmpleoServiceImpl(OfertaEmpleoRepository ofertaEmpleoRepository, UsuarioRepository usuarioRepository,
-            CategoriaRepository categoriaRepository, FileStorageService fileStorageService) {
-        this.fileStorageService = fileStorageService;
+            CategoriaRepository categoriaRepository) {
         this.ofertaEmpleoRepository = ofertaEmpleoRepository;
         this.usuarioRepository = usuarioRepository;
         this.categoriaRepository = categoriaRepository;
@@ -40,7 +39,6 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
     @Override
     public OfertaEmpleo createOferta(OfertaEmpleo ofertaEmpleo) {
         validateOfertaEmpleo(ofertaEmpleo);
-        ofertaEmpleo.setHabilitado(false);
         return ofertaEmpleoRepository.save(ofertaEmpleo);
     }
 
@@ -75,12 +73,9 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
 
     @Override
     public void deleteOferta(UUID id) {
-        OfertaEmpleo oferta = ofertaEmpleoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Oferta de empleo no encontrada con ID: " + id));
-        if (oferta.getLogoUrl() != null) {
-            fileStorageService.deleteFile(oferta.getLogoUrl());
+        if (!ofertaEmpleoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Oferta de empleo no encontrada con ID: " + id);
         }
-
         ofertaEmpleoRepository.deleteById(id);
     }
 
@@ -89,21 +84,6 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
         return ofertaEmpleoRepository.findByUsuarioEmail(userEmail).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<OfertaEmpleoResponseDTO> getOfertasNoHabilitadas() {
-        return ofertaEmpleoRepository.findByHabilitadoFalse().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public OfertaEmpleo habilitarOferta(UUID id) {
-        OfertaEmpleo oferta = ofertaEmpleoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Oferta de empleo no encontrada con ID: " + id));
-        oferta.setHabilitado(true);
-        return ofertaEmpleoRepository.save(oferta);
     }
 
     private void validateOfertaEmpleo(OfertaEmpleo ofertaEmpleo) {
@@ -115,12 +95,14 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
             errors.add("El usuario publicador especificado no existe");
         }
 
+        // Validación de Categoría
         if (ofertaEmpleo.getCategoria() == null || ofertaEmpleo.getCategoria().getId() == null) {
             errors.add("La categoría es requerida");
         } else if (!categoriaRepository.existsById(ofertaEmpleo.getCategoria().getId())) {
             errors.add("La categoría especificada no existe");
         }
 
+        // Validación de fechas
         if (ofertaEmpleo.getFechaCierre() != null) {
             if (ofertaEmpleo.getFechaCierre().isBefore(LocalDateTime.now())) {
                 errors.add("La fecha de cierre no puede ser anterior a la fecha actual");
@@ -130,6 +112,7 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
             }
         }
 
+        // Validaciones de forma de postulación
         if (ofertaEmpleo.getFormaPostulacion() == null) {
             errors.add("La forma de postulación es requerida");
         } else {
@@ -172,12 +155,11 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
         }
     }
 
-    public OfertaEmpleoResponseDTO convertToDTO(OfertaEmpleo ofertaEmpleo) {
+    private OfertaEmpleoResponseDTO convertToDTO(OfertaEmpleo ofertaEmpleo) {
         OfertaEmpleoResponseDTO dto = new OfertaEmpleoResponseDTO();
         dto.setId(ofertaEmpleo.getId());
         dto.setTitulo(ofertaEmpleo.getTitulo());
         dto.setDescripcion(ofertaEmpleo.getDescripcion());
-        dto.setHabilitado(ofertaEmpleo.isHabilitado());
 
         OfertaEmpleoResponseDTO.UsuarioPublicadorDTO usuarioDTO = new OfertaEmpleoResponseDTO.UsuarioPublicadorDTO();
         usuarioDTO.setEmail(ofertaEmpleo.getUsuario().getEmail());
@@ -195,7 +177,7 @@ public class OfertaEmpleoServiceImpl implements OfertaEmpleoService {
         }
 
         OfertaEmpleoResponseDTO.CategoriaDTO categoriaDTO = new OfertaEmpleoResponseDTO.CategoriaDTO();
-        categoriaDTO.setId(ofertaEmpleo.getCategoria().getId().toString());
+        categoriaDTO.setId(ofertaEmpleo.getCategoria().getId().toString()); 
         categoriaDTO.setNombre(ofertaEmpleo.getCategoria().getNombre());
         dto.setCategoria(categoriaDTO);
 
