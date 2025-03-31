@@ -8,5 +8,15 @@
     "name": "cors.allowed-origins",
     "type": "java.lang.String",
     "description": "A description for 'cors.allowed-origins'"
+  },
+  {
+    "name": "jwt.admin-email",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.admin-email'"
+  },
+  {
+    "name": "file.upload-dir",
+    "type": "java.lang.String",
+    "description": "A description for 'file.upload-dir'"
   }
 ]}

@@ -7,12 +7,16 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Arrays;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
     private static final long EXPIRATION_TIME = 86400000;
+
+    @Value("${jwt.admin-email}")
+    private String adminEmails;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -27,7 +31,9 @@ public class JwtUtil {
             throw new IllegalArgumentException("El email no puede ser nulo o vacío");
         }
 
-        String rol = email.equals("empleospuertomadryn@gmail.com") ? "ADMIN" : "USER";
+        String[] adminEmailsArray = adminEmails.split(",");
+
+        String rol = Arrays.asList(adminEmailsArray).contains(email) ? "ADMIN" : "USER";
 
         return Jwts.builder()
                 .setSubject(email)

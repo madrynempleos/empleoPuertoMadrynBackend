@@ -28,9 +28,9 @@ public class AdminServiceImpl implements AdminService {
     private final EmailService emailService;
 
     public AdminServiceImpl(OfertaEmpleoRepository ofertaRepository, CategoriaRepository categoriaRepository, UsuarioRepository usuarioRepository, EmailService emailService) {
-        repositories.put("Oferta", ofertaRepository);
-        repositories.put("Categoria", categoriaRepository);
-        repositories.put("Usuario", usuarioRepository);
+        repositories.put("ofertas", ofertaRepository);
+        repositories.put("categoria", categoriaRepository);
+        repositories.put("usuario", usuarioRepository);
         this.emailService = emailService;
     }
 
@@ -65,12 +65,15 @@ public class AdminServiceImpl implements AdminService {
         if (!repository.existsById(id)) {
             throw new RuntimeException(entityName + " no encontrada con ID: " + id);
         }
+        if (entityName.equals("ofertas")) {
+            emailService.enviarCorreoAvisoRechazado((OfertaEmpleo) getByIdFromEntity(entityName, id));
+        }
         repository.deleteById(id);
     }
 
     @Override
     public void enableJobOffer(UUID id) {
-        OfertaEmpleoRepository ofertaRepository = (OfertaEmpleoRepository) repositories.get("Oferta");
+        OfertaEmpleoRepository ofertaRepository = (OfertaEmpleoRepository) repositories.get("ofertas");
         if (ofertaRepository == null) {
             throw new RuntimeException("Entidad no soportada: Oferta");
         }

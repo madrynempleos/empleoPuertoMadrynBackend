@@ -7,4 +7,5 @@ public interface EmailService {
     void enviarCorreoContacto(Contacto contacto);
     void enviarCorreoAvisoEmpresa(OfertaEmpleo ofertaEmpleo);
     void enviarCorreoAviso(OfertaEmpleo ofertaEmpleo);
+    void enviarCorreoAvisoRechazado(OfertaEmpleo ofertaEmpleo);
 }

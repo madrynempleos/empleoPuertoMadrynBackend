@@ -43,31 +43,31 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-public void enviarCorreoAvisoEmpresa(OfertaEmpleo ofertaEmpleo) {
-    SimpleMailMessage mensaje = new SimpleMailMessage();
-    mensaje.setTo(ofertaEmpleo.getEmailContacto());
-    mensaje.setSubject("¡Tu oferta de empleo ya está activa en Madryn Empleos!");
-    mensaje.setFrom(emailNuestro);
+    public void enviarCorreoAvisoEmpresa(OfertaEmpleo ofertaEmpleo) {
+        SimpleMailMessage mensaje = new SimpleMailMessage();
+        mensaje.setTo(ofertaEmpleo.getUsuario().getEmail());
+        mensaje.setSubject("¡Tu oferta de empleo ya está activa en Madryn Empleos!");
+        mensaje.setFrom(emailNuestro);
 
-    StringBuilder cuerpoCorreo = new StringBuilder();
-    cuerpoCorreo.append("Estimado/a,\n\n")
-                .append("¡Buenas noticias! Tu oferta de empleo ha sido revisada y aprobada por nuestro equipo, y ya está publicada en la plataforma de Madryn Empleos. A partir de ahora, miles de candidatos podrán verla y postularse a esta gran oportunidad que ofrece tu empresa.\n\n")
-                .append("Detalles de tu oferta activa:\n")
-                .append("--------------------------------------------------\n")
-                .append("Título: ").append(ofertaEmpleo.getTitulo()).append("\n")
-                .append("Empresa: ").append(ofertaEmpleo.getEmpresaConsultora()).append("\n")
-                .append("Email de contacto: ").append(ofertaEmpleo.getEmailContacto()).append("\n")
-                .append("Fecha de cierre: ").append(ofertaEmpleo.getFechaCierre() != null ? ofertaEmpleo.getFechaCierre() : "Sin fecha límite").append("\n")
-                .append("--------------------------------------------------\n\n")
-                .append("¿Qué puedes hacer ahora?\n")
-                .append("Puedes compartir el enlace de tu oferta con tu red de contactos o simplemente esperar a que los candidatos comiencen a postularse. Si necesitas realizar algún ajuste o tienes preguntas, no dudes en escribirnos a ").append(emailNuestro).append(". ¡Estamos aquí para apoyarte!\n\n")
-                .append("Gracias por confiar en Madryn Empleos para conectar tu empresa con el talento que buscas. ¡Te deseamos mucho éxito con esta oferta!\n\n")
-                .append("Un cordial saludo,\n")
-                .append("El equipo de Madryn Empleos");
+        StringBuilder cuerpoCorreo = new StringBuilder();
+        cuerpoCorreo.append("Estimado/a,\n\n")
+                    .append("¡Buenas noticias! Tu oferta de empleo ha sido revisada y aprobada por nuestro equipo, y ya está publicada en la plataforma de Madryn Empleos. A partir de ahora, miles de candidatos podrán verla y postularse a esta gran oportunidad que ofrece tu empresa.\n\n")
+                    .append("Detalles de tu oferta activa:\n")
+                    .append("--------------------------------------------------\n")
+                    .append("Título: ").append(ofertaEmpleo.getTitulo()).append("\n")
+                    .append("Empresa: ").append(ofertaEmpleo.getEmpresaConsultora()).append("\n")
+                    .append("Email de contacto: ").append(ofertaEmpleo.getEmailContacto()).append("\n")
+                    .append("Fecha de cierre: ").append(ofertaEmpleo.getFechaCierre() != null ? ofertaEmpleo.getFechaCierre() : "Sin fecha límite").append("\n")
+                    .append("--------------------------------------------------\n\n")
+                    .append("¿Qué puedes hacer ahora?\n")
+                    .append("Puedes compartir el enlace de tu oferta con tu red de contactos o simplemente esperar a que los candidatos comiencen a postularse. Si necesitas realizar algún ajuste o tienes preguntas, no dudes en escribirnos a ").append(emailNuestro).append(". ¡Estamos aquí para apoyarte!\n\n")
+                    .append("Gracias por confiar en Madryn Empleos para conectar tu empresa con el talento que buscas. ¡Te deseamos mucho éxito con esta oferta!\n\n")
+                    .append("Un cordial saludo,\n")
+                    .append("El equipo de Madryn Empleos");
 
-    mensaje.setText(cuerpoCorreo.toString());
-    mailSender.send(mensaje);
-}
+        mensaje.setText(cuerpoCorreo.toString());
+        mailSender.send(mensaje);
+    }
 
     @Override
     public void enviarCorreoAviso(OfertaEmpleo ofertaEmpleo) {
@@ -91,6 +91,31 @@ public void enviarCorreoAvisoEmpresa(OfertaEmpleo ofertaEmpleo) {
                     .append("Descripción: ").append(ofertaEmpleo.getDescripcion()).append("\n")
                     .append("URL de la imagen: ").append(ofertaEmpleo.getLogoUrl()).append("\n")
                     .append("--------------------------------------------------\n\n")
+                    .append("Saludos,\n")
+                    .append("Equipo de Empleo Puerto Madryn");
+
+        mensaje.setText(cuerpoCorreo.toString());
+        mailSender.send(mensaje);
+    }
+
+    @Override
+    public void enviarCorreoAvisoRechazado(OfertaEmpleo ofertaEmpleo) {
+        SimpleMailMessage mensaje = new SimpleMailMessage();
+        mensaje.setTo(ofertaEmpleo.getUsuario().getEmail());
+        mensaje.setSubject("Tu oferta de empleo ha sido rechazada");
+        mensaje.setFrom(emailNuestro);
+
+        StringBuilder cuerpoCorreo = new StringBuilder();
+        cuerpoCorreo.append("Estimado/a,\n\n")
+                    .append("Lamentamos informarte que tu oferta de empleo ha sido rechazada por nuestro equipo. Agradecemos tu interés en publicar en nuestra plataforma y te invitamos a revisar las políticas y requisitos para futuras publicaciones.\n\n")
+                    .append("Detalles de la oferta:\n")
+                    .append("--------------------------------------------------\n")
+                    .append("Título: ").append(ofertaEmpleo.getTitulo()).append("\n")
+                    .append("Empresa: ").append(ofertaEmpleo.getEmpresaConsultora()).append("\n")
+                    .append("Email de contacto: ").append(ofertaEmpleo.getEmailContacto()).append("\n")
+                    .append("Fecha de publicación: ").append(ofertaEmpleo.getFechaPublicacion()).append("\n")
+                    .append("--------------------------------------------------\n\n")
+                    .append("Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos.\n\n")
                     .append("Saludos,\n")
                     .append("Equipo de Empleo Puerto Madryn");
 
