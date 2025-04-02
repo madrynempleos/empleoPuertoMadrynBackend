@@ -1,6 +1,7 @@
 package ozoriani.empleomadrynbackend.home.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -22,56 +23,27 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void enviarCorreoContacto(Contacto contacto) {
         validateContacto(contacto);
-        try {
-            MimeMessage mensaje = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true);
-            helper.setTo(emailNuestro);
-            helper.setSubject("Nuevo Mensaje desde el Formulario de Contacto");
-            helper.setFrom(emailNuestro);
-            helper.setReplyTo(contacto.getEmail());
+        SimpleMailMessage mensaje = new SimpleMailMessage();
+        mensaje.setTo(emailNuestro);
+        mensaje.setSubject("Nuevo Mensaje desde el Formulario de Contacto");
+        mensaje.setFrom(emailNuestro);
+        mensaje.setReplyTo(contacto.getEmail());
 
-            String htmlContent = """
-                    <html>
-                    <body style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-                        <div style="background-color: #1e90ff; padding: 15px; text-align: center; color: white; border-radius: 8px 8px 0 0;">
-                            <h1 style="margin: 0; font-size: 24px;">Madryn Empleos</h1>
-                        </div>
-                        <div style="background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 0 0 8px 8px;">
-                            <h2 style="color: #1e90ff;">Nuevo Mensaje de Contacto</h2>
-                            <p>¡Hola equipo!</p>
-                            <p>Hemos recibido un nuevo mensaje a través del formulario de contacto. Aquí están los detalles:</p>
-                            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-                                <tr style="background-color: #f1f1f1;">
-                                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>Nombre:</strong></td>
-                                    <td style="padding: 10px; border: 1px solid #ddd;">%s</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>Apellido:</strong></td>
-                                    <td style="padding: 10px; border: 1px solid #ddd;">%s</td>
-                                </tr>
-                                <tr style="background-color: #f1f1f1;">
-                                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>Email:</strong></td>
-                                    <td style="padding: 10px; border: 1px solid #ddd;">%s</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>Mensaje:</strong></td>
-                                    <td style="padding: 10px; border: 1px solid #ddd;">%s</td>
-                                </tr>
-                            </table>
-                            <p>Por favor, revisa este mensaje y responde al remitente si es necesario utilizando la opción "Responder".</p>
-                            <p style="color: #777; font-size: 12px; text-align: center;">Sistema Automático de Madryn Empleos</p>
-                        </div>
-                    </body>
-                    </html>
-                    """
-                    .formatted(contacto.getNombre(), contacto.getApellido(), contacto.getEmail(),
-                            contacto.getMensaje());
+        StringBuilder cuerpoCorreo = new StringBuilder();
+        cuerpoCorreo.append("¡Hola equipo!\n\n")
+                .append("Hemos recibido un nuevo mensaje a través del formulario de contacto de Madryn Empleos. Aquí están los detalles:\n\n")
+                .append("--------------------------------------------------\n")
+                .append("Nombre: ").append(contacto.getNombre()).append("\n")
+                .append("Apellido: ").append(contacto.getApellido()).append("\n")
+                .append("Email: ").append(contacto.getEmail()).append("\n")
+                .append("Mensaje: ").append(contacto.getMensaje()).append("\n")
+                .append("--------------------------------------------------\n\n")
+                .append("Por favor, revisa este mensaje y responde al remitente si es necesario utilizando la opción 'Responder' (Reply), ya que el campo Reply-To está configurado con su email.\n\n")
+                .append("Saludos,\n")
+                .append("Sistema Automático de Madryn Empleos");
 
-            helper.setText(htmlContent, true);
-            mailSender.send(mensaje);
-        } catch (MessagingException e) {
-            throw new RuntimeException("Error al enviar el correo de contacto: " + e.getMessage(), e);
-        }
+        mensaje.setText(cuerpoCorreo.toString());
+        mailSender.send(mensaje);
     }
 
     @Override
