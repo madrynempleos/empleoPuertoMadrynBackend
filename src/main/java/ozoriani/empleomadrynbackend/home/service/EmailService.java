@@ -8,4 +8,6 @@ public interface EmailService {
     void enviarCorreoAvisoEmpresa(OfertaEmpleo ofertaEmpleo);
     void enviarCorreoAviso(OfertaEmpleo ofertaEmpleo);
     void enviarCorreoAvisoRechazado(OfertaEmpleo ofertaEmpleo);
+    void enviarCorreoPostulacion(OfertaEmpleo ofertaEmpleo, String applicantEmail, byte[] curriculumData, String curriculumFileName);
+    void enviarConfirmacionPostulante(String applicantEmail, OfertaEmpleo oferta);
 }
